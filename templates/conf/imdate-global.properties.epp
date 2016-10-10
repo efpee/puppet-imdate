@@ -1,0 +1,91 @@
+# ================================================
+# IMDatE global properties
+# ================================================
+
+# NRT database properties
+# -----------------------------------------------
+
+db.nrt.driver=oracle.jdbc.driver.OracleDriver
+db.nrt.url=<%= $imdate::jdbc_url %>
+db.nrt.username=<%= $imdate::jdbc_user %>
+db.nrt.password=<%= $imdate::jdbc_pass %>
+
+# SATAIS database properties
+# -----------------------------------------------
+# TODO: different jndi / user / pass why?
+
+db.satais.driver=oracle.jdbc.driver.OracleDriver
+db.satais.url=<%= $imdate::jdbc_url_satais %>
+db.satais.username=<%= $imdate::jdbc_user_satais %>
+db.satais.password=satais<%= $imdate::jdbc_pass_satais %>
+
+# SAVAS database properties
+# -----------------------------------------------
+# TODO: different jndi /user / pass why?
+
+db.savas.driver=oracle.jdbc.driver.OracleDriver
+db.savas.url=<%= $imdate::jdbc_url %>
+db.savas.username=<%= $imdate::jdbc_user %>
+db.savas.password=<%= $imdate::jdbc_pass %>
+
+# JMS properties
+# -----------------------------------------------
+
+jms.provider.url=t3://<%= $imdate::jms_managed_servers.join(',') %> 
+jms.initial.factory=weblogic.jndi.WLInitialContextFactory
+jms.connection.factory=imdate.ConnectionFactory
+jms.security.principal=<%= $imdate::wls_user %>
+jms.security.credentials=<%= $imdate::wls_pass %>
+
+jms.l0.queue=imdate.l0.queue
+jms.ovr.queue=imdate.ovr.queue
+jms.satais.queue=imdate.l1.satais.queue
+jms.savas.topic=imdate.l1.topic
+jms.cap.queue=imdate.cap.queue
+jms.savasEvent.topic=imdate.savasEvent.topic
+
+imdate.ovr.endpoint.url=<%= $imdate::load_balanced_app_server_url -%>/ovrws/imdateId
+track.service.url=<%= $imdate::load_balanced_app_server_url -%>/imdatews/services/tracks?wsdl
+
+# TODO: confirm not needed anymore
+# Providers
+# -----------------------------------------------
+
+# Luxspace for EFCA and EUNAVFOR
+npr-proxy-lux-acq.sockin.socketPort=12151
+npr-proxy-lux-acq.sockin.socketHost=lssl41.emsa.local
+
+# FFI
+npr-proxy-ffi-acq.sockin.socketPort=12131
+npr-proxy-ffi-acq.sockin.socketHost=lssl41.emsa.local
+
+# Luxspace mspilot
+npr-proxy-luxmspilot-acq.sockin.socketPort=12141
+npr-proxy-luxmspilot-acq.sockin.socketHost=lssl41.emsa.local
+
+# Luxspace frontex
+#npr-proxy-luxfrontex-acq.sockin.socketPort=12161
+#npr-proxy-luxfrontex-acq.sockin.socketHost=lssl41.emsa.local
+
+# Luxspace
+npr-proxy-lux-acq.sockin.socketPort=12081
+npr-proxy-lux-acq.sockin.socketHost=lssl41.emsa.local
+
+
+# B2-B3 interface
+# -----------------------------------------------
+
+# Endpoints
+b2b3.acq.external.endpoint.url=<%= $imdate::b2b3_ext_server -%>/s2-acq-ws/DataReceptionService
+b2b3.acq.internal.endpoint.url=<%= $imdate::b2b3_int_server -%>/s2-acq-ws/DataReceptionService
+aux.data.folder=<%= $imdate::app_dir -%>/aux-data/
+
+# Template used for simulated data
+b2b3.acq.pos.service=s4
+
+# SAVAS engine/node properties
+# -----------------------------------------------
+
+savas.engine.host=qwls56.emsa.local
+savas.node.name=node1
+cdf.quarantine.folder=<%= imdate::app_dir -%>/data/acq/quarantine/savasnod/

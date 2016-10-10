@@ -1,0 +1,21 @@
+############ CONFIGURATION FILE VERSION ############
+configurationFile.version=1.0
+
+############ MODULE CONFIGURATION ############
+
+
+############ LOG CONFIGURATION ############
+logLevel = <%= $imdate::log_level %>
+fileName = imdate-ovr-reader.log
+logDir = <%= $imdate::log_dir %>
+
+# Do not change following properties
+log4j.rootLogger=${logLevel},FILE
+log4j.appender.FILE.Threshold=${logLevel}
+log4j.appender.FILE=org.apache.log4j.FileAppender
+log4j.appender.FILE.File=${logDir}/${fileName}
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.conversionPattern=%d [%t] %-5p %c - %m%n
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d [%t] %-5p %c - %m%n

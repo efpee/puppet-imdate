@@ -1,0 +1,83 @@
+############ CONFIGURATION FILE VERSION ############
+configurationFile.version=1.0
+
+############ MODULE CONFIGURATION ############
+oes.enabled=false
+
+###################################
+#  ssn services
+#
+#  if auth=true the service send a basic authentication request
+#
+###################################
+wsdl.ssn.wsdlLocation = <%= $imdate::service_ssn_ovr -%>/ssn-shipparticulars-ws/ssnvesselservice/vessel.wsdl
+ssn.wsdl.auth = <%= $imdate::service_ssn_ovr_auth %>
+ssn.wsdl.password = <%= $imdate::service_ssn_ovr_pass %>
+ssn.wsdl.username = <%= $imdate::service_ssn_ovr_user %>
+wsdl.dra.wsdlLocation = <%= $imdate::load_balanced_app_server_url -%>/imdate-ssn-server-ws/services/dataRequestor
+ssn.wsdl.soapAction = https://safeseanet.emsa.europa.eu/vesselservice/request
+
+####################################
+#
+#  datasource name
+####################################
+datasource.jndi.name=<%= $imdate::jdbc_jndi %>
+
+###################################
+#  thetis services
+#
+#  if auth=true the service send a basic authentication request
+#
+###################################
+thetis.wsdl.endpoint<%= $imdate::service_thetis %>/ShipProxyService?WSDL
+thetis.wsdl.auth=<%= $imdate::service_thetis_auth %>
+thetis.wsdl.password=<%= $imdate::service_thetis_pass %>
+thetis.wsdl.username=<%= $imdate::service_thetis_user %>
+
+
+###################################
+#
+#  Inspection service
+#
+###################################
+wsdl.thetis.inspection.wsdlLocation=<%= $imdate::service_thetis_inspections %>/PublicInformationExportService
+wsdl.thetis.inspection.password=<%= $imdate::service_thetis_pass %>
+wsdl.thetis.inspection.username=<%= $imdate::service_thetis_user %>
+
+#default user 
+default_user=Default
+
+############################################
+#
+# endpoint for gml style to export generator
+############################################
+xsd.gml.endpoint = <%= $imdate::load_balanced_http_server_url %>/wup_export/gml_export.xsd
+
+############################################
+#
+# endpoint for kml style to export generator
+############################################
+xml.kml.endpoint = <%= $imdate::load_balanced_http_server_url %>/wup_export/kml_style.xml
+
+############################################
+#
+# OGC services
+############################################
+ogc.oilSpills.service.url =  <%= $imdate::service_csn -%>/deegree-wfs/services
+ogc.satelliteImages.service.url = <%= $imdate::service_csn -%>/vcat-csw/services
+
+############ LOG CONFIGURATION ############
+logLevel = <%= $imdate::log_level %>
+fileName = imdate-wup-weblogic.log
+logDir = <%= $imdate::log_dir %>
+
+# Do not change following properties
+log4j.rootLogger=${logLevel},FILE
+log4j.appender.FILE.Threshold=${logLevel}
+log4j.appender.FILE=org.apache.log4j.FileAppender
+log4j.appender.FILE.File=${logDir}/${fileName}
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.conversionPattern=%d [%t] %-5p %c - %m%n
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d [%t] %-5p %c - %m%n

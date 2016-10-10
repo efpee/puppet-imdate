@@ -1,0 +1,37 @@
+############ CONFIGURATION FILE VERSION ############
+configurationFile.version=1.0
+
+############ MODULE CONFIGURATION ############
+db.data-source = jdbc.imdate.imdateusr
+
+jms.provider-url = <%= $imdate::jms_managed_servers.join(',') %>
+jms.connection-factory = imdate.ConnectionFactory
+jms.destination = imdate.sarsurpic.queue
+jms.username = <%= $imdate::wls_user %>
+jms.password = <%= $imdate::wls_pass %>
+
+surpic.enough.threshold = <%= $imdate::sarsurpic_soft_limit %>
+surpic.error.threshold = <%= $imdate::sarsurpic_soft_limit %>
+
+surpic.hours = <%= $imdate::sarsurpic_limit_by_hours %>
+
+lrit.userid = 9143
+lrit.endpoint = <%= $imdate::services_lrit_ws %>
+lrit.from = IMDATE
+lrit.to = EU_LRIT_DC
+
+############ LOG CONFIGURATION ############
+logLevel = <%= $imdate::log_level %>
+fileName = imdate-sarsurpic.log
+logDir = <%= $imdate::log_dir %>
+
+# Do not change following properties
+log4j.rootLogger=${logLevel},FILE
+log4j.appender.FILE.Threshold=${logLevel}
+log4j.appender.FILE=org.apache.log4j.FileAppender
+log4j.appender.FILE.File=${logDir}/${fileName}
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.conversionPattern=%d [%t] %-5p %c - %m%n
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d [%t] %-5p %c - %m%n

@@ -1,0 +1,57 @@
+print 'Creating local JMS resources ....'
+
+TIME_TO_LIVE = 15L * 60L * 1000L #miliseconds
+FORWARD_DELAY = -1 #seconds 
+
+JMS_MODULE = 'IMDATEJMSModule'
+JMS_SUBDEPLOYMENT = 'IMDATEsubdeployment'
+JMS_SERVER = 'imdateJmsSrv'
+
+CONNECTION_FACTORIES = (
+    ('imdate.ConnectionFactory'),)
+
+QUEUES = (
+    'imdate.cap.queue',
+    'imdate.l0.internal.queue',
+    'imdate.l0.queue',
+    'imdate.l1.dbwriter.queue',
+    'imdate.l1.distributor.queue',
+    'imdate.l1.satais.queue',
+    'imdate.l1.savas.queue',
+    'imdate.ovr.queue',
+    'imdate.uncorrleated.queue')
+
+TOPICS = (
+    'imdate.correlation.topic',
+    'imdate.downsampled.topic',
+    'imdate.l1.topic',
+    'imdate.savasEvent.topic')
+
+# -------- CREATE JMS RESOURCES
+
+# Create 2 JMS Servers per managed server
+jmsServers = []
+i = 1
+for ms in JMS_MANAGED_SERVERS:
+  jmsServers.append( createJMSServer(JMS_SERVER + str(i), ms) )
+  i += 1
+  
+# Create a JMS Module
+jmsResource = createJMSModule(JMS_MODULE, JMS_SUBDEPLOYMENT, JMS_CLUSTER, jmsServers).getJMSResource()
+
+# Create a connection factory and all distributed queues
+for factory in CONNECTION_FACTORIES:
+  createConnectionFactory(jmsResource, factory, factory, true, JMS_SUBDEPLOYMENT)
+
+timeToLive = {
+  'imdate.l1.distributor.queue': 5000,
+  'imdate.l1.satais.queue': 1000
+}  
+
+for queue in QUEUES:
+  t = timeToLive.get(queue, TIME_TO_LIVE)
+  createUniformDistributedQueue(jmsResource, queue, queue, JMS_SUBDEPLOYMENT, t, FORWARD_DELAY)
+
+for topic in TOPICS:
+  createUniformDistributedTopic(jmsResource, topic, topic, JMS_SUBDEPLOYMENT, TIME_TO_LIVE, FORWARD_DELAY)
+

@@ -1,0 +1,26 @@
+# Fichier de configuration des port de IMDatE
+#----------------------------------------------------------------------------------
+
+# Port saisacqnpr
+saisacqnpr.jmx.port=11900
+
+# Port saisacq
+saisacq.jmx.port=11901
+
+# Port saisinj
+saisinj.jmx.port=11902
+
+# Port saisdis
+saisdis.jmx.port=11903
+
+# Port savaseng
+savaseng.jmx.port=11910
+
+# Port savasnod
+savasnod.jmx.port=11911
+
+savasnod.jolokia.port=11977
+savaseng.jolokia.port=11978
+#TODO: only 1 node?
+savasnod.jolokia.host=<%= $imdate::savasnod_jolokia_host %> 
+savaseng.jolokia.host=<%= $imdate::savaseng_jolokia_host %> 

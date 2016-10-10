@@ -1,0 +1,47 @@
+############ CONFIGURATION FILE VERSION ############
+configurationFile.version=1.0
+
+############ MODULE CONFIGURATION ############
+###########################################
+#
+# For internal purpose, do not change this
+###########################################
+
+urlIdentity = <%= $imdate::load_balanced_app_server_url -%>/ovrws/identity
+token = 1248126600
+
+###############
+#
+# Database connection, user imdate
+##############
+driverName = oracle.jdbc.driver.OracleDriver
+connectionString = <%= $imdate::jdbc_url %>
+db.username = <%= $imdate::jdbc_user %>
+db.password = <%= $imdate::jdbc_pass %>
+
+#############################
+# origDir: put the incident files in this directory
+# stageDir: temporary directory
+# archiveDir: onceingested, the files are moved here. To be emptied periodically
+# errorDir: directory for wrong files
+############################
+origDir = <%= $imdate::app_dir %>/incident_working_dir/
+stageDir = <%= $imdate::app_dir %>/incident_working_dir/stage
+archiveDir = <%= $imdate::app_dir %>/incident_working_dir/archive
+errorDir = <%= $imdate::app_dir %>/incident_working_dir/error
+
+############ LOG CONFIGURATION ############
+logLevel = <%= $imdate::log_level %>
+fileName = imdate-incident.log
+logDir = <%= $imdate::log_dir %>
+
+# Do not change following properties
+log4j.rootLogger=${logLevel},FILE
+log4j.appender.FILE.Threshold=${logLevel}
+log4j.appender.FILE=org.apache.log4j.FileAppender
+log4j.appender.FILE.File=${logDir}/${fileName}
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.conversionPattern=%d [%t] %-5p %c - %m%n
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d [%t] %-5p %c - %m%n

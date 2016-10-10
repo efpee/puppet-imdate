@@ -1,0 +1,56 @@
+############ CONFIGURATION FILE VERSION ############
+configurationFile.version=1.0
+
+############ MODULE CONFIGURATION ############
+# Advanced Computer Systems
+# IMDatE project for EMSA
+# Database Cleaner
+# This configuration file is the one controlling
+# the periodic job that cleans ship position and ship voyages Oracle table
+# Name of the jar is imdate-DatabaseCleaner
+##############################################
+
+###################################################
+# Database URL
+#
+# Change the following parameters according to 
+# your environment
+###################################################
+db.driver = oracle.jdbc.OracleDriver
+db.url = <%= $imdate::jdbc_url %>
+db.username = <%= $imdate::jdbc_user %>
+db.password = <%= $imdate::jdbc_pass %>
+
+# The number of hours to keep a surveillance active
+hoursBeforeTurnOff = 12
+
+# The number of hours before deleting the surveillance (for troubleshooting)
+hoursBeforeDelete = 48
+
+# The CSNDC pattern (PLEASE DO NOT CHANGE THIS)
+CSNDCPattern = CSN for frame 
+
+#######################################################
+# Simulation mode: if True, queries are not executed, 
+#                  we produce only some log 
+# 				   Set to False to execute the task
+
+simulationMode = false
+
+lockTimeout = 60
+
+############ LOG CONFIGURATION ############
+logLevel = <%= $imdate::log_level %>
+fileName = imdate-csn-dist-cleaner.log
+logDir = <%= $imdate::log_dir %>
+
+# Do not change following properties
+log4j.rootLogger=${logLevel},FILE
+log4j.appender.FILE.Threshold=${logLevel}
+log4j.appender.FILE=org.apache.log4j.FileAppender
+log4j.appender.FILE.File=${logDir}/${fileName}
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.conversionPattern=%d [%t] %-5p %c - %m%n
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d [%t] %-5p %c - %m%n

@@ -1,0 +1,11 @@
+oldApplication = '<%= $emsa_downsampling::app_old_name %>'
+newApplication = '<%= $emsa_downsampling::app_name %>'
+
+print 'Stopping and undeploying ' + oldApplication
+stopApplication(oldApplication)
+undeploy(oldApplication)
+
+app_targets= ','.join(JMS_MANAGED_SERVERS)
+print 'Deploying and starting ' + newApplication + ' to ' + app_targets
+deploy(appName=newApplication, path='<%= $emsa_downsampling::wls_dir %>/app/<%= $emsa_downsampling::pkg %>', targets=app_targets, planPath='<%= $emsa_downsampling::wls_dir %>/plan/Plan.xml')
+startApplication(newApplication)

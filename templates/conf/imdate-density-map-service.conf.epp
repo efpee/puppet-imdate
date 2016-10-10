@@ -1,0 +1,29 @@
+############ CONFIGURATION FILE VERSION ############
+configurationFile.version=1.0
+
+############ MODULE CONFIGURATION ############
+datasource.local= <%= $imdate::jdbc_jndi %>
+
+
+# POSITIONS_DENSITY_MAP TABLE WILL BE REFRESHED WITH DATA LIMITED BY :
+#   SYSDATE - default.lower.bound.refresh.time.interval < DATA TIMESTAMP < SYSDATE - default.upper.bound.refresh.time.interval
+#  (example )  SYSDATE -9 < DATA TIMESTAMP < SYSDATE -2  , ==>  1 week data
+default.upper.bound.refresh.time.interval=2
+default.lower.bound.refresh.time.interval=3
+
+
+############ LOG CONFIGURATION ############
+logLevel = <%= $imdate::log_level %>
+fileName = imdate-density-map-service.log
+logDir = <%= $imdate::log_dir %>
+
+# Do not change following properties
+log4j.rootLogger=${logLevel},FILE
+log4j.appender.FILE.Threshold=${logLevel}
+log4j.appender.FILE=org.apache.log4j.FileAppender
+log4j.appender.FILE.File=${logDir}/${fileName}
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.conversionPattern=%d [%t] %-5p %c - %m%n
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d [%t] %-5p %c - %m%n

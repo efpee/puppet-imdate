@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# common dirs
+mkdir -p <%= $imdate::app_dir -%>
+mkdir -p <%= $imdate::log_dir -%>
+mkdir -p <%= $imdate::conf_dir -%>
+
+# specific dirs
+mkdir -p <%= $imdate::app_dir -%>/data/acq/quarantine/savasnod
+mkdir -p <%= $imdate::app_dir -%>/aux-data
+
+mkdir -p <%= $imdate::app_dir -%>/incident_working_dir/stage
+mkdir -p <%= $imdate::app_dir -%>/incident_working_dir/archive
+mkdir -p <%= $imdate::app_dir -%>/incident_working_dir/error
+
+mkdir -p <%= $imdate::app_dir -%>/working_dirs/radar-isif/inbox
+mkdir -p <%= $imdate::app_dir -%>/working_dirs/radar-isif/stage
+mkdir -p <%= $imdate::app_dir -%>/working_dirs/radar-isif/archive
+mkdir -p <%= $imdate::app_dir -%>/working_dirs/radar-isif/error
+
+mkdir -p <%= $imdate::app_dir -%>/jasper_templates
+mkdir -p <%= $imdate::app_dir -%>/tmp/cap_reports_resources
+
+mkdir -p <%= $imdate::app_dir -%>/failed/vds
+mkdir -p <%= $imdate::app_dir -%>/failed/cdf
+mkdir -p <%= $imdate::app_dir -%>/failed/distribution
+
+mkdir -p <%= $imdate::app_dir -%>/working_dirs/vds-reader/inbox
+mkdir -p <%= $imdate::app_dir -%>/working_dirs/vds-reader/stage
+mkdir -p <%= $imdate::app_dir -%>/working_dirs/vds-reader/archive
+mkdir -p <%= $imdate::app_dir -%>/working_dirs/vds-reader/error
+
+chown -R oracle:imdate <%= $imdate::app_dir -%>

@@ -1,0 +1,54 @@
+############ CONFIGURATION FILE VERSION ############
+configurationFile.version=1.0
+
+############ MODULE CONFIGURATION ############
+
+###########################
+#
+# Temporaney images storage
+#
+###########################
+cap.report.templatesDir=<%= $imdate::app_dir %>/jasper_templates/
+cap.report.templateFileName.singleAlert=mainReportAlarm.jasper
+cap.report.templateFileName.fromEventAlert=mainFromEvent.jasper
+%TODO: confirm /tmp dir
+cap.report.resourceFilesDir=<%= $imdate::app_dir %>/tmp/cap_reports_resources/
+cap.report.maxReportsInARow=1
+
+cap.report.uriResourcePath=/alert/info/resource
+cap.report.uriTag=uri
+cap.report.derefUriTag=derefUri
+cap.report.file.virtualizer.threshold=200
+
+cap.report.keepFiles=false
+
+################
+#
+# log head memory use
+################
+cap.report.logHead=true
+
+###############
+#
+# Database connection, user imdate
+##############
+driverName = oracle.jdbc.driver.OracleDriver
+connectionString = <%= $imdate::jdbc_url %>
+db.username = <%= $imdate::jdbc_user %>
+db.password = <%= $imdate::jdbc_pass %>
+
+############ LOG CONFIGURATION ############
+logLevel = <%= $imdate::log_level %>
+fileName = imdate-report-engine-surveillance.log
+logDir = <%= $imdate::log_dir %>
+
+# Do not change following properties
+log4j.rootLogger=${logLevel},FILE
+log4j.appender.FILE.Threshold=${logLevel}
+log4j.appender.FILE=org.apache.log4j.FileAppender
+log4j.appender.FILE.File=${logDir}/${fileName}
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.conversionPattern=%d [%t] %-5p %c - %m%n
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d [%t] %-5p %c - %m%n

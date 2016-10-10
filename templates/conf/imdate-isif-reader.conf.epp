@@ -1,0 +1,86 @@
+############ CONFIGURATION FILE VERSION ############
+configurationFile.version=1.0
+
+############ MODULE CONFIGURATION ############
+##################
+#
+# Connection Factory
+# 
+##################
+connectionFactory=imdate.ConnectionFactory
+providerUrl= <%= $imdate::jms_managed_servers.join(',') %>
+username= <%= $imdate::wls_user %>
+password= <%= $imdate::wls_pass %>
+##################
+
+##################
+# Radar messages already containing ship particoulars
+# are not correlated, thus sended to the L0 queue
+##################  
+correlatedQueue = imdate.l0.queue
+
+##################
+# 
+# Radar messages not containing identity information
+# are sent to the uncorrelated queue
+##################  
+uncorrelatedQueue = imdate.uncorrelated.queue
+
+#############################
+# origDir: 		inbox for radar ISIF files
+# stageDir: 	working directory
+# archiveDir: 	once ingested, the files are moved here. To be emptied periodically
+# errorDir: 	directory for rejected files
+############################
+origDir = <%= $imdate::app_dir -%>/working_dirs/radar-isif/inbox
+stageDir =  <%= $imdate::app_dir -%>/working_dirs/radar-isif/stage
+archiveDir =  <%= $imdate::app_dir -%>/working_dirs/radar-isif/archive
+errorDir =  <%= $imdate::app_dir -%>/working_dirs/radar-isif/error
+
+############################
+#
+# file lines split
+#
+# The original file is split in several files having
+# <chunksize> number of lines. This is because the original files 
+# could be huge
+############################
+chunksize = 1000
+
+##########################################
+#
+# allow files archiving
+# If this parameter is True, the processed files are
+# archived in <archiveDir> directory
+# This parameter could be override from the command line (-A [true|false] )
+##########################################
+isArchived = true
+
+############ LOG CONFIGURATION ############
+#
+# Define the root logger with appender file
+#
+log = <%= $imdate::log_dir -%>
+log4j.rootLogger = <%= $imdate::log_level %>, FILE
+# Define the file appender
+log4j.appender.FILE=org.apache.log4j.FileAppender
+log4j.appender.FILE.File=${log}/imdate-isif-reader.log
+# Define the layout for file appender
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.conversionPattern=%d [%t] %-5p %c - %m%n
+
+####################################################################
+# This is the SLOW appender to be used for debugging purposes only!!
+####################################################################
+log4j.appender.FILE_DEBUG=org.apache.log4j.FileAppender
+log4j.appender.FILE_DEBUG.File=${log}/imdate-isif-reader-debug.log
+log4j.appender.FILE_DEBUG.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE_DEBUG.layout.conversionPattern=%d [%t] %-5p %c - %C{1} line %L caller: %M -  %m%n
+
+#################
+# console appender
+# A1 is set to be a ConsoleAppender.
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+# A1 uses PatternLayout.
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d [%t] %-5p %c - %m%n

@@ -1,0 +1,4 @@
+# connect WLST to the Admin Server
+print 'Connecting to server: <%= $emsa_downsampling::wls_admin_url %>' 
+connect('<%= $emsa_downsampling::wls_user %>', '<%= $emsa_downsampling::wls_pass %>', '<%= $emsa_downsampling::wls_admin_url %>')
+

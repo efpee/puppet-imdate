@@ -1,0 +1,29 @@
+print 'Start WebLogic deployment ....'
+
+DOMAIN_DIR = '<%= $imdate::wls_domain_dir %>'
+
+APP_CLUSTER = '/Clusters/<%= $imdate::wls_application_cluster %>'
+APP_MANAGED_SERVERS = <%= $imdate::wls_application_servers %>
+
+JMS_CLUSTER = '/Clusters/<%= $imdate::wls_jms_cluster %>'
+JMS_MANAGED_SERVERS = <%= $imdate::wls_jms_servers %>
+
+try:
+  execfile('connect.py')
+
+  edit()
+  startEdit()
+  
+  execfile('jms_functions.py')
+  execfile('create_jms_resources.py')
+  execfile('deploy_downsampling.py')
+
+  # save and activate editor, and disconnect
+  save()
+  activate(block='true')
+  print 'Finished WebLogic deployment' 
+  disconnect()    
+except:
+  print 'Error while trying to save and/or activate!!!'
+  dumpStack()
+  # FOR DEBUG cancelEdit('y')
