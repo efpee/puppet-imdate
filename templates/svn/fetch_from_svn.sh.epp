@@ -1,0 +1,16 @@
+#!/bin/sh
+
+USER=<%= $imdate::svn_user %>
+PASS=<%= $imdate::svn_pass %>
+TAG=<%= $imdate::svn_tag %>
+SERVER=<%= $imdate::svn_server %>
+
+cd <%= $imdate::conf_dir %>
+
+#svn export --username=$USER --password=$PASS $SERVER/config/tags/$TAG/coherence-wl-cache-config.xml
+svn export --username=$USER --password=$PASS $SERVER/config/tags/$TAG/correlator.hints.properties
+
+cd wsdl
+#svn export --username=$USER --password=$PASS $SERVER/config/tags/$TAG/wsdl/thetis-PublicInformationExportService.wsdl
+#svn export --username=$USER --password=$PASS $SERVER/config/tags/$TAG/wsdl/thetis-ShipProxyService.wsdl
+
