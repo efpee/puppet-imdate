@@ -52,6 +52,11 @@ class imdate (
   $smtp_host            = '127.0.0.1',
   $smtp_port            = '25',
   
+  $svn_user             = 'premefr',
+  $svn_pass             = 'Juli16...',
+  $svn_tag              = "prod-20151126-rel-1.5.1",
+  $svn_server           = "http://pforge01/svn/repos/imdate/",
+  
   $savasnod_jolokia_host            = 'qvas3.emsa.local',
   $savaseng_jolokia_host            = 'qwls56.emsa.local',
   
@@ -124,6 +129,7 @@ class imdate (
 
   $conf_dir             = "$app_dir/conf"
   $log_dir              = "$app_dir/logs"
+  $script_dir           = "$app_dir/scripts"
   
 	Exec { path 	=>
 		['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/']
@@ -133,9 +139,31 @@ class imdate (
     ensure              => 'installed',
   }
   
+  package {'subversion':
+    ensure              => 'installed',
+  }
+  
+  group {'oinstall':
+		ensure		=> present,
+	}
+
+	user {'oracle':
+		ensure		          => present,
+		managehome	        => true,
+		groups		          => 'oinstall',
+		require		          => Group['oinstall'],
+	}
+
   group {'imdate':
     ensure              => 'present',
     before              => File['/tmp/create-dirs.sh'],
+  }
+
+  user {'validation_team':
+    ensure              => present,
+ 		managehome	        => true,
+    groups              => 'imdate',
+    require             => Group['imdate'],
   }
 
   #TODO: crontabs should alternate on machines?
@@ -182,7 +210,7 @@ class imdate (
     ensure              => directory,
     owner               => 'oracle',
     group               => 'imdate',
-    mode                => '0700',
+    mode                => '0755',
     content             => epp('imdate/create-dirs.sh.epp'),
   } ->
     
@@ -193,142 +221,315 @@ class imdate (
   file {"$app_dir/conf/imdate.port":
     ensure              => file,
     content             => epp('imdate/conf/imdate.port.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',  
   } ->
   file {"$app_dir/conf/imdate-cap-reader.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-cap-reader.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-csn-dist-cleaner.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-csn-dist-cleaner.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-database-cleaner.conf":
     ensure              => file,
     content             => template('imdate/conf/imdate-database-cleaner.conf.erb'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
   } ->
   file {"$app_dir/conf/imdate-db-writer.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-db-writer.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-density-map-service.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-density-map-service.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-distribution-application.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-distribution-application.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-distribution-processors-ejb.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-distribution-processors-ejb.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-distribution-sender.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-distribution-sender.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-distribution-services.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-distribution-services.conf.epp'),
-  } ->
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  } ->
   file {"$app_dir/conf/imdate-distributor.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-distributor.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,   
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-dist-surv.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-dist-surv.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-georegistry-proxy.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-georegistry-proxy.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
     file {"$app_dir/conf/imdate-global.properties":
     ensure              => file,
     content             => epp('imdate/conf/imdate-global.properties.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate--incident.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-incident.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-isif-reader.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-isif-reader.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-L0L1-processor.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-L0L1-processor.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-L0-reader.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-L0-reader.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-ovr-reader.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-ovr-reader.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
     file {"$app_dir/conf/imdate-ovr-service.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-ovr-service.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-positions-service.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-positions-service.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-report-engine-surveillance.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-report-engine-surveillance.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-sarsurpic.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-sarsurpic.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-sarsurpic-processor.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-sarsurpic-processor.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
     file {"$app_dir/conf/imdate-solr-writer-mdb.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-solr-writer-mdb.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-ssn-server-ws.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-ssn-server-ws.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-ssn-service.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-ssn-service.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-uncorrelated-reader.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-uncorrelated-reader.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
-    file {"$app_dir/conf/imdate-users-service-ejbws.conf":
+  file {"$app_dir/conf/imdate-users-service-ejbws.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-users-service-ejbws.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-vds-reader.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-vds-reader.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-video.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-video.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/imdate-wup-weblogic.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-wup-weblogic.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
-    file {"$app_dir/conf/imdate-xquery-distributor.conf":
+  file {"$app_dir/conf/imdate-xquery-distributor.conf":
     ensure              => file,
     content             => epp('imdate/conf/imdate-xquery-distributor.conf.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
   file {"$app_dir/conf/OES_logging.properties":
     ensure              => file,
-    content             => epp('imdate/conf/OES_logging.properties'),
+    content             => epp('imdate/conf/OES_logging.properties.epp'),
+    owner               => 'oracle',
+    group               => 'imdate',
+    backup              => true,  
+    mode                => '0640',
   } ->
-  exec {'change-app-dir-ownership':
-    command   => "chown -R oracle:imdate $app_dir",
-  }
+#  exec {'change-app-dir-ownership':
+#    command   => "chown -R oracle:imdate $app_dir",
+#  } ->
+  file {"$script_dir/svn/fetch_from_svn.sh":
+    ensure              => file,
+    content             => epp('svn/fetch_from_svn.sh.epp'),
+    mode                => '0700',
+    owner               => 'root',
+    group               => 'root',
+  } ->
+  exec {'fetch_from_svn':
+    command             => "$script_dir/svn/fetch_from_svn.sh",  
+  } ->
+
+  file {"$script_dir/wlst":
+		ensure	=> directory,
+	} ->
+	file {"$script_dir/wlst/connect.py":
+		ensure	=> file,
+		content	=> epp('imdate/wlst/connect.py.epp'),
+	} ->
+
+	file {"$script_dir/wlst/jms_functions.py":
+		# this could be reused in the other projects
+		ensure	=> file,
+		content	=> epp('imdate/wlst/jms_functions.py.epp'),
+	} -> 
+
+	file {"$script_dir/wlst/create_jms_resources.py":
+		ensure	=> file,
+		content	=> epp('imdate/wlst/create_jms_resources.py.epp'),
+	} ->
+	
+	file {"$script_dir/wlst/deploy_downsampling.py":
+		ensure	=> file,
+		content	=> epp('imdate/wlst/deploy_downsampling.py.epp'),
+	} -> 
+
+	file {"$script_dir/wlst/create_resources.py":
+		ensure	=> file,
+		content	=> epp('imdate/wlst/create_resources.py.epp'),
+	} ->
+  
 
 
 }
