@@ -3,7 +3,7 @@
 # common dirs
 mkdir -p <%= $imdate::app_dir -%>
 mkdir -p <%= $imdate::log_dir -%>
-mkdir -p <%= $imdate::conf_dir -%>
+mkdir -p <%= $imdate::conf_dir -%>/wsdl
 mkdir -p <%= $imdate::script_dir -%>/wlst
 mkdir -p <%= $imdate::script_dir -%>/svn
 

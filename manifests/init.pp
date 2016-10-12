@@ -44,6 +44,10 @@ class imdate (
   $wls_user             = '',
   $wls_pass             = '',
   $wls_admin_url        = '',
+  $wls_app_cluster      = 'imdateAppCluster',
+  $wls_app_servers      = ['imdateAppSrv1', 'imdateAppSrv2'],
+  $wls_jms_cluster      = 'imdateJmsCluster',
+  $wls_jms_servers      = ['imdateJmsSrv1', 'imdateJmsSrv2', 'imdateJmsSrv3', 'imdateJmsSrv4'],
   
   $jdbc_jndi            = 'jdbc.imdate.imdateusr',
   $jdbc_url             = '',
@@ -129,33 +133,26 @@ class imdate (
 
   
 ) {
-
-  $conf_dir             = "$app_dir/conf"
-  $log_dir              = "$app_dir/logs"
-  $script_dir           = "$app_dir/scripts"
-  
 	Exec { path 	=>
 		['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/']
 	}
 
-  package {'git':
-    ensure              => 'installed',
-  }
-  
-  package {'subversion':
-    ensure              => 'installed',
-  }
-  
-  group {'oinstall':
-		ensure		=> present,
-	}
+  $packages = [ 'vim','tree','subversion','wget']
+  ensure_packages($packages)
 
-	user {'oracle':
-		ensure		          => present,
-		managehome	        => true,
-		groups		          => 'oinstall',
-		require		          => Group['oinstall'],
-	}
+  $conf_dir             = "$app_dir/conf"
+  $log_dir              = "$app_dir/logs"
+  $script_dir           = "$app_dir/scripts"
+
+  ensure_resource('group', 'oinstall', {ensure => 'present',})
+
+  if !defined(User['oracle']) {
+    ensure_resource('user', 'oracle', {
+                'ensure'          => present,
+                'managehome'      => true,
+                'groups'          => 'oinstall',
+                'require'         => Group['oinstall'],
+  })}
 
   group {'imdate':
     ensure              => 'present',
@@ -210,7 +207,7 @@ class imdate (
   }
   
   file {'/tmp/create-dirs.sh':
-    ensure              => directory,
+    ensure              => file,
     owner               => 'oracle',
     group               => 'imdate',
     mode                => '0755',
@@ -221,6 +218,16 @@ class imdate (
     command             => '/tmp/create-dirs.sh',
   } -> 
   
+#  $epp_templates = ['imdate.port', 'imdate-cap-reader.conf']
+# 
+#  file {"$app_dir/$epp_templates":
+#    ensure              => file,
+#    content             => template("imdate/conf/$epp_templates.erb"),
+#    owner               => 'oracle',
+#    group               => 'imdate',
+#    backup              => true,  
+#  }
+   
   file {"$app_dir/conf/imdate.port":
     ensure              => file,
     content             => epp('imdate/conf/imdate.port.epp'),
@@ -495,14 +502,14 @@ class imdate (
 #  } ->
   file {"$script_dir/svn/fetch_from_svn.sh":
     ensure              => file,
-    content             => epp('svn/fetch_from_svn.sh.epp'),
+    content             => epp('imdate/svn/fetch_from_svn.sh.epp'),
     mode                => '0700',
     owner               => 'root',
     group               => 'root',
   } ->
   exec {'fetch_from_svn':
     command             => "$script_dir/svn/fetch_from_svn.sh",  
-    unless              => $svn_server.empty? or $svn_user.empty? or $svn_pass.empty? or $svn_tag.empty?
+    #onlyif                  => $svn_server and $svn_user and $svn_pass and $svn_tag
   } ->
 
   file {"$script_dir/wlst":
@@ -514,24 +521,23 @@ class imdate (
 		mode    => '0700',
 	} ->
 
-	file {"$script_dir/wlst/jms_functions.py":
-		# this could be reused in the other projects
-		ensure	=> file,
-		content	=> epp('imdate/wlst/jms_functions.py.epp'),
-		mode    => '0755',
-	} -> 
-
+  exec {'fetch_jms_functions':
+    command	=> "wget https://github.com/efpee/wlst/blob/master/jms_functions.py -O $script_dir/wlst/jms_functions.py",
+		unless	=> "test -f $script_dir/wlst/jms_functions.py",
+		require	=> Package['wget'],
+  } ->
+  
 	file {"$script_dir/wlst/create_jms_resources.py":
 		ensure	=> file,
 		content	=> epp('imdate/wlst/create_jms_resources.py.epp'),
 		mode    => '0755',
 	} ->
 	
-	file {"$script_dir/wlst/deploy_downsampling.py":
-		ensure	=> file,
-		content	=> epp('imdate/wlst/deploy_downsampling.py.epp'),
-		mode    => '0755',
-	} -> 
+	#file {"$script_dir/wlst/deploy_downsampling.py":
+	#	ensure	=> file,
+	#	content	=> epp('imdate/wlst/deploy_downsampling.py.epp'),
+	#	mode    => '0755',
+	#} -> 
 
 	file {"$script_dir/wlst/create_resources.py":
 		ensure	=> file,

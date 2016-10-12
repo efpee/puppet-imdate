@@ -2,11 +2,11 @@ print 'Start WebLogic deployment ....'
 
 DOMAIN_DIR = '<%= $imdate::wls_domain_dir %>'
 
-APP_CLUSTER = '/Clusters/<%= $imdate::wls_application_cluster %>'
-APP_MANAGED_SERVERS = <%= $imdate::wls_application_servers %>
+APP_CLUSTER = '/Clusters/<%= $imdate::wls_app_cluster %>'
+APP_MANAGED_SERVERS = [<%= $imdate::wls_app_servers.map |$s| {"\'$s\'"}.join(',') %>]
 
 JMS_CLUSTER = '/Clusters/<%= $imdate::wls_jms_cluster %>'
-JMS_MANAGED_SERVERS = <%= $imdate::wls_jms_servers %>
+JMS_MANAGED_SERVERS = [<%= $imdate::wls_jms_servers.map |$s| {"\'$s\'"}.join(',') %>]
 
 try:
   execfile('connect.py')
