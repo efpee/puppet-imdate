@@ -1,0 +1,4 @@
+# connect WLST to the Admin Server
+print 'Connecting to server: <%= $imdate::wls_admin_url %>' 
+connect('<%= $imdate::wls_user %>', '<%= $imdate::wls_pass %>', '<%= $imdate::wls_admin_url %>')
+

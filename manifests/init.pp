@@ -40,36 +40,39 @@
 class imdate ( 
   $app_dir              = '/imdate/imdate-apps',
   $log_level            = 'INFO',
+
+  $wls_user             = '',
+  $wls_pass             = '',
+  $wls_admin_url        = '',
+  
   $jdbc_jndi            = 'jdbc.imdate.imdateusr',
-  $jdbc_url             = 'jdbc:oracle:thin:@pexa1cl1.emsa.local:1535/STARP',
-  $jdbc_grid_url        = 'jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=pexa1cl1)(PORT=1535)))(CONNECT_DATA=(SERVICE_NAME=STARP)))',
-  $jdbc_user            = 'IMDATEUSR',
-  $jdbc_pass            = 'ACSPOC',
-  $jdbc_url_satais      = 'jdbc:oracle:thin:@pexa1cl1.emsa.local:1535/STARP',
-  $jdbc_user_satais     = 'IMDATEUSR',
-  $jdbc_pass_satais     = 'ACSPOC',
+  $jdbc_url             = '',
+  $jdbc_grid_url        = '',
+  $jdbc_user            = '',
+  $jdbc_pass            = '',
+  $jdbc_url_satais      = '',
+  $jdbc_user_satais     = '',
+  $jdbc_pass_satais     = '',
 
   $smtp_host            = '127.0.0.1',
   $smtp_port            = '25',
   
-  $svn_user             = 'premefr',
-  $svn_pass             = 'Juli16...',
-  $svn_tag              = "prod-20151126-rel-1.5.1",
-  $svn_server           = "http://pforge01/svn/repos/imdate/",
+  $svn_user             = '',
+  $svn_pass             = '',
+  $svn_tag              = '',
+  $svn_server           = '',
   
-  $savasnod_jolokia_host            = 'qvas3.emsa.local',
-  $savaseng_jolokia_host            = 'qwls56.emsa.local',
+  $savasnod_jolokia_host            = '',
+  $savaseng_jolokia_host            = '',
   
   $retention_period_positions       = 30,
   $retention_period_savas           = 7,
   $db_partitions_to_create          = 14,
-  $wls_user                         = 'imdateusr',
-  $wls_pass                         = 'ACSpassword2016!',
-  $load_balanced_app_server_url     = 'http://qimdate2.emsa.local:7035',
-  $load_balanced_jms_server_url     = 'http://qimdate2.emsa.local:7036',
-  $load_balanced_http_server_url    = 'http://qimdate2.emsa.local:7039',
-  $app_managed_servers  = ['qwls51:7035','qwls52:7035'],
-  $jms_managed_servers  = ['qwls51:7036','qwls51:7037','qwls52:7036','qwls52:7037'],
+  $load_balanced_app_server_url     = '',
+  $load_balanced_jms_server_url     = '',
+  $load_balanced_http_server_url    = '',
+  $app_managed_servers  = [],
+  $jms_managed_servers  = [],
   $jms_server_prefix    = 'ImdateJMSServer',
   $db_commit_treshold   = 1000,
   $db_commit_interval   = 120000,
@@ -88,8 +91,8 @@ class imdate (
   $distribution_ws_port             = '10180',
   $distribution_refresh             = 5000,
 
-  $b2b3_ext_server                  = 'http://qwls56.emsa.local:10300',  
-  $b2b3_int_server                  = 'http://0.0.0.0:10300',
+  $b2b3_ext_server                  = '',  
+  $b2b3_int_server                  = '',
   
   $track_service_limit_by_geom      = 2000,
   $track_service_limit_by_id        = 1000,
@@ -101,27 +104,27 @@ class imdate (
   $sarsurpic_hard_limit = 2000,
   $sarsurpic_limit_by_hours = 24,
     
-  $service_ccbr_wsdl    = 'http://qesb01.emsa.local:7101/CCBR/proxy/CCBRInformationService?wsdl',
-  $service_ccbr_user    = 'CCBR_IMDATE',
-  $service_ccbr_pass    = 'Imdate2016.!',
-  $service_wfs          = 'http://qzorba1:8080/geoserver/imdate/ows',
-  $service_solr         = 'http://qsolr01.emsa.local:8983/solr',
-  $service_lrit_ws      = 'http://qesb01:7101/LRIT/EULRITDC/proxy/ES2LRIT',
+  $service_ccbr_wsdl    = '',
+  $service_ccbr_user    = '',
+  $service_ccbr_pass    = '',
+  $service_wfs          = '',
+  $service_solr         = '',
+  $service_lrit_ws      = '',
   $service_zookeeper_is_master      = false,
   
-  $service_ssn          = 'http://qwls44:7002',
-  $service_ssn_ovr      = 'http://qwls44:7006',
+  $service_ssn          = '',
+  $service_ssn_ovr      = '',
   $service_ssn_ovr_auth = false,
-  $service_ssn_ovr_user = 'liscanada',
-  $service_ssn_ovr_pass = 'teste',
+  $service_ssn_ovr_user = '',
+  $service_ssn_ovr_pass = '',
   
-  $service_thetis       = 'http://qosb3.emsa.local:7103/Thetis_Service_Layer/Proxy_Services',
-  $service_thetis_inspections       = 'https://ws.thetis-pp.emsa.europa.eu:444/thetis-data-exchange-integration-webservice',
-  $service_thetis_auth       = true,
-  $service_thetis_user       = 'imdate',
-  $service_thetis_pass       = 'ppteste1',
+  $service_thetis       = '',
+  $service_thetis_inspections = '',
+  $service_thetis_auth  = true,
+  $service_thetis_user  = '',
+  $service_thetis_pass  = '',
 
-  $service_csn   = 'http://twls10:7021',
+  $service_csn   = '',
 
 
   
@@ -499,6 +502,7 @@ class imdate (
   } ->
   exec {'fetch_from_svn':
     command             => "$script_dir/svn/fetch_from_svn.sh",  
+    unless              => $svn_server.empty? or $svn_user.empty? or $svn_pass.empty? or $svn_tag.empty?
   } ->
 
   file {"$script_dir/wlst":
@@ -507,28 +511,33 @@ class imdate (
 	file {"$script_dir/wlst/connect.py":
 		ensure	=> file,
 		content	=> epp('imdate/wlst/connect.py.epp'),
+		mode    => '0700',
 	} ->
 
 	file {"$script_dir/wlst/jms_functions.py":
 		# this could be reused in the other projects
 		ensure	=> file,
 		content	=> epp('imdate/wlst/jms_functions.py.epp'),
+		mode    => '0755',
 	} -> 
 
 	file {"$script_dir/wlst/create_jms_resources.py":
 		ensure	=> file,
 		content	=> epp('imdate/wlst/create_jms_resources.py.epp'),
+		mode    => '0755',
 	} ->
 	
 	file {"$script_dir/wlst/deploy_downsampling.py":
 		ensure	=> file,
 		content	=> epp('imdate/wlst/deploy_downsampling.py.epp'),
+		mode    => '0755',
 	} -> 
 
 	file {"$script_dir/wlst/create_resources.py":
 		ensure	=> file,
 		content	=> epp('imdate/wlst/create_resources.py.epp'),
-	} ->
+		mode    => '0755',
+	} 
   
 
 
