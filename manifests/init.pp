@@ -284,9 +284,11 @@ class imdate (
   } ->
   file {"$app_dir/conf/imdate-csn-dist-cleaner.conf":
     content             => epp('imdate/conf/imdate-csn-dist-cleaner.conf.epp'),
+    mode                => '0600',
   } ->
   file {"$app_dir/conf/imdate-database-cleaner.conf":
     content             => template('imdate/conf/imdate-database-cleaner.conf.erb'),
+    mode                => '0600',
   } ->
   file {"$app_dir/conf/imdate-db-writer.conf":
     content             => epp('imdate/conf/imdate-db-writer.conf.epp'),
@@ -314,15 +316,19 @@ class imdate (
   } ->
   file {"$app_dir/conf/imdate-georegistry-proxy.conf":
     content             => epp('imdate/conf/imdate-georegistry-proxy.conf.epp'),
+    mode                => '0600',
   } ->
     file {"$app_dir/conf/imdate-global.properties":
     content             => epp('imdate/conf/imdate-global.properties.epp'),
+    mode                => '0600',
   } ->
   file {"$app_dir/conf/imdate-incident.conf":
     content             => epp('imdate/conf/imdate-incident.conf.epp'),
+    mode                => '0600',
   } ->
   file {"$app_dir/conf/imdate-isif-reader.conf":
     content             => epp('imdate/conf/imdate-isif-reader.conf.epp'),
+    mode                => '0600',
   } ->
   file {"$app_dir/conf/imdate-L0L1-processor.conf":
     content             => epp('imdate/conf/imdate-L0L1-processor.conf.epp'),
@@ -335,12 +341,15 @@ class imdate (
   } ->
   file {"$app_dir/conf/imdate-positions-service.conf":
     content             => epp('imdate/conf/imdate-positions-service.conf.epp'),
+    mode                => '0600',
   } ->
   file {"$app_dir/conf/imdate-report-engine-surveillance.conf":
     content             => epp('imdate/conf/imdate-report-engine-surveillance.conf.epp'),
+    mode                => '0600',
   } ->
   file {"$app_dir/conf/imdate-sarsurpic.conf":
     content             => epp('imdate/conf/imdate-sarsurpic.conf.epp'),
+    mode                => '0600',
   } ->
   file {"$app_dir/conf/imdate-sarsurpic-processor.conf":
     content             => epp('imdate/conf/imdate-sarsurpic-processor.conf.epp'),
@@ -362,15 +371,18 @@ class imdate (
   } ->
   file {"$app_dir/conf/imdate-vds-reader.conf":
     content             => epp('imdate/conf/imdate-vds-reader.conf.epp'),
+    mode                => '0600',
   } ->
   file {"$app_dir/conf/imdate-video.conf":
     content             => epp('imdate/conf/imdate-video.conf.epp'),
   } ->
   file {"$app_dir/conf/imdate-wup-weblogic.conf":
     content             => epp('imdate/conf/imdate-wup-weblogic.conf.epp'),
+    mode                => '0600',
   } ->
   file {"$app_dir/conf/imdate-xquery-distributor.conf":
     content             => epp('imdate/conf/imdate-xquery-distributor.conf.epp'),
+    mode                => '0600',
   } ->
   file {"$app_dir/conf/OES_logging.properties":
     content             => epp('imdate/conf/OES_logging.properties.epp'),
