@@ -5,7 +5,7 @@ FORWARD_DELAY = -1 #seconds
 
 JMS_MODULE = 'IMDATEJMSModule'
 JMS_SUBDEPLOYMENT = 'IMDATEsubdeployment'
-JMS_SERVER = <%= $imdate::jms_server_prefix %>
+JMS_SERVER = '<%= $imdate::jms_server_prefix %>'
 
 CONNECTION_FACTORIES = (
     ('imdate.ConnectionFactory'),)
@@ -37,7 +37,7 @@ for ms in JMS_MANAGED_SERVERS:
   i += 1
   
 # Create a JMS Module
-jmsResource = createJMSModule(JMS_MODULE, JMS_SUBDEPLOYMENT, JMS_CLUSTER, jmsServers).getJMSResource()
+jmsResource = createJMSModule(JMS_MODULE, JMS_SUBDEPLOYMENT, '/Clusters/' + JMS_CLUSTER, jmsServers).getJMSResource()
 
 # Create a connection factory and all distributed queues
 for factory in CONNECTION_FACTORIES:
