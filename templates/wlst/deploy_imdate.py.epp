@@ -1,120 +1,119 @@
-applications = 
-  [
+applications = [
     {
-      'new':"imdate-cap-reader-ear-1.0.0-SNAPSHOT", 
-      'old':"imdate-cap-processor-mdb (1.0.21)", 
-      'target':JMS_CLUSTER, 
-      'package':ARTIFACT_DIR+'/mdbs/imdate-cap-reader-ear-1.0.0-SNAPSHOT.ear'},
-    {
-      'new':"imdate-db-writer-ear-1.0.0-SNAPSHOT", 
+      'new':"imdate-cap-reader-ear (1.0.0)", 
       'old':'', 
       'target':JMS_CLUSTER, 
-      'package':ARTIFACT_DIR+'/mdbs/imdate-db-writer-ear-1.0.0-SNAPSHOT.ear'},
+      'package':ARTIFACT_DIR+'/mdbs/imdate-cap-reader-ear-1.0.0.ear'},
     {
-      'new':"imdate-density-map-service-1.0.0-SNAPSHOT", 
-      'old':'', 
-      'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/webapps/imdate-density-map-service-1.0.0-SNAPSHOT.jar'},
-    {
-      'new':"imdate-dist-surv-ear-1.0.15-SNAPSHOT (1.0.15-SNAPSHOT)", 
-      'old':'', 
-      'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/webapps/imdate-dist-surv-ear-1.0.15-SNAPSHOT (1.0.15-SNAPSHOT).jar'},
-    {
-      'new':"imdate-distribution-application-ear-1.0.15-SNAPSHOT (1.0.15-SNAPSHOT)", 
-      'old':'', 
-      'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/webapps/imdate-distribution-application-ear-1.0.15-SNAPSHOT (1.0.15-SNAPSHOT).jar'},
-    {
-      'new':"imdate-distribution-processors-ejb-1.0.14-SNAPSHOT-jar-with-dependencies", 
-      'old':'', 
-      'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/webapps/imdate-distribution-processors-ejb-1.0.14-SNAPSHOT-jar-with-dependencies.jar'},
-    {
-      'new':"imdate-distribution-services-ear-1.0.10-SNAPSHOT (1.0.10-SNAPSHOT)", 
-      'old':'', 
-      'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/webapps/imdate-distribution-services-ear-1.0.10-SNAPSHOT (1.0.10-SNAPSHOT).jar'},
-    {
-      'new':"imdate-distributor-ear-1.0.0-SNAPSHOT", 
+      'new':"imdate-db-writer-ear (1.0.0)", 
       'old':'', 
       'target':JMS_CLUSTER, 
-      'package':ARTIFACT_DIR+'/mdbs/imdate-distributor-ear-1.0.0-SNAPSHOT.ear'},
+      'package':ARTIFACT_DIR+'/mdbs/imdate-db-writer-ear-1.0.0.ear'},
     {
-      'new':"imdate-georegistry-proxy-ear-1.0.6-SNAPSHOT (1.0.6-SNAPSHOT)", 
+      'new':"imdate-density-map-service (1.0.0)", 
       'old':'', 
       'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/webapps/imdate-georegistry-proxy-ear-1.0.6-SNAPSHOT (1.0.6-SNAPSHOT).jar'},
+      'package':ARTIFACT_DIR+'/web-modules/imdate-density-map-service-1.0.0.war'},
     {
-      'new':"imdate-L0-reader-ear-1.0.0-SNAPSHOT", 
-      'old':'', 
-      'target':JMS_CLUSTER, 
-      'package':ARTIFACT_DIR+'/mdbs/imdate-L0-reader-ear-1.0.0-SNAPSHOT.ear'},
-    {
-      'new':"imdate-L0L1-processor-ear-1.0.0-SNAPSHOT", 
-      'old':'', 
-      'target':JMS_CLUSTER, 
-      'package':ARTIFACT_DIR+'/mdbs/imdate-L0L1-processor-ear-1.0.0-SNAPSHOT.ear'},
-    {
-      'new':"imdate-ovr-reader-ear-1.0.0-SNAPSHOT", 
-      'old':'', 
-      'target':JMS_CLUSTER, 
-      'package':ARTIFACT_DIR+'/mdbs/imdate-ovr-reader-ear-1.0.0-SNAPSHOT.ear'},
-    {
-      'new':"imdate-ovr-service-ear-1.0.28-SNAPSHOT (1.0.28-SNAPSHOT)", 
+      'new':"imdate-dist-surv-ear (1.0.15)", 
       'old':'', 
       'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/webapps/imdate-ovr-service-ear-1.0.28-SNAPSHOT (1.0.28-SNAPSHOT).jar'},
+      'package':ARTIFACT_DIR+'/web-modules/imdate-dist-surv-ear-1.0.15.ear'},
     {
-      'new':"imdate-positions-service-ear-1.0.33-SNAPSHOT", 
+      'new':"imdate-distribution-application-ear (1.0.15)", 
       'old':'', 
       'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/webapps/imdate-positions-service-ear-1.0.33-SNAPSHOT.jar'},
+      'package':ARTIFACT_DIR+'/web-modules/imdate-distribution-application-ear-1.0.15.jar'},
     {
-      'new':"imdate-sarsurpic-ear-1.0.16-SNAPSHOT (1.0.16-SNAPSHOT)", 
+      'new':"imdate-distribution-processors-ejb (1.0.14)", 
       'old':'', 
       'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/webapps/imdate-sarsurpic-ear-1.0.16-SNAPSHOT (1.0.16-SNAPSHOT).jar'},
+      'package':ARTIFACT_DIR+'/web-modules/imdate-distribution-processors-ejb-1.0.14-jar-with-dependencies.jar'},
     {
-      'new':"imdate-sarsurpic-processor-ear-1.0.0-SNAPSHOT", 
+      'new':"imdate-distribution-services-ear (1.0.10)", 
+      'old':'', 
+      'target':APP_CLUSTER, 
+      'package':ARTIFACT_DIR+'/web-modules/imdate-distribution-services-ear-1.0.10.ear'},
+    {
+      'new':"imdate-distributor-ear (1.0.0)", 
       'old':'', 
       'target':JMS_CLUSTER, 
-      'package':ARTIFACT_DIR+'/mdbs/imdate-sarsurpic-processor-ear-1.0.0-SNAPSHOT.ear'},
+      'package':ARTIFACT_DIR+'/mdbs/imdate-distributor-ear-1.0.0.ear'},
     {
-      'new':"imdate-ssn-server-ws-1.0.10-SNAPSHOT", 
+      'new':"imdate-georegistry-proxy-ear (1.0.6)", 
+      'old':'', 
+      'target':APP_CLUSTER, 
+      'package':ARTIFACT_DIR+'/web-modules/imdate-georegistry-proxy-ear-1.0.6.ear'},
+    {
+      'new':"imdate-L0-reader-ear (1.0.0)", 
+      'old':'', 
+      'target':JMS_CLUSTER, 
+      'package':ARTIFACT_DIR+'/mdbs/imdate-L0-reader-ear-1.0.0.ear'},
+    {
+      'new':"imdate-L0L1-processor-ear (1.0.0)", 
+      'old':'', 
+      'target':JMS_CLUSTER, 
+      'package':ARTIFACT_DIR+'/mdbs/imdate-L0L1-processor-ear-1.0.0.ear'},
+    {
+      'new':"imdate-ovr-reader-ear (1.0.0)", 
+      'old':'', 
+      'target':JMS_CLUSTER, 
+      'package':ARTIFACT_DIR+'/mdbs/imdate-ovr-reader-ear-1.0.0.ear'},
+    {
+      'new':"imdate-ovr-service-ear (1.0.28)", 
+      'old':'', 
+      'target':APP_CLUSTER, 
+      'package':ARTIFACT_DIR+'/web-modules/imdate-ovr-service-ear-1.0.28.ear'},
+    {
+      'new':"imdate-positions-service-ear (1.0.33)", 
+      'old':'', 
+      'target':APP_CLUSTER, 
+      'package':ARTIFACT_DIR+'/web-modules/imdate-positions-service-ear-1.0.33.ear'},
+    {
+      'new':"imdate-sarsurpic-ear (1.0.16)", 
+      'old':'', 
+      'target':APP_CLUSTER, 
+      'package':ARTIFACT_DIR+'/web-modules/imdate-sarsurpic-ear-1.0.16.ear'},
+    {
+      'new':"imdate-sarsurpic-processor-ear (1.0.0)", 
+      'old':'', 
+      'target':JMS_CLUSTER, 
+      'package':ARTIFACT_DIR+'/mdbs/imdate-sarsurpic-processor-ear-1.0.0.ear'},
+    {
+      'new':"imdate-ssn-server-ws (1.0.10)", 
       'old':'', 
       'target':"$APP_CLUSTER", 
-      'package':ARTIFACT_DIR+'/webapps/imdate-ssn-server-ws-1.0.10-SNAPSHOT.jar'},
+      'package':ARTIFACT_DIR+'/web-modules/imdate-ssn-server-ws-1.0.10.war'},
     {
-      'new':"imdate-ssn-service-ear-1.0.3-SNAPSHOT (1.0.3-SNAPSHOT)", 
+      'new':"imdate-ssn-service-ear (1.0.3)", 
       'old':'', 
       'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/webapps/imdate-ssn-service-ear-1.0.3-SNAPSHOT (1.0.3-SNAPSHOT).jar'},
+      'package':ARTIFACT_DIR+'/web-modules/imdate-ssn-service-ear-1.0.3.ear'},
     {
-      'new':"imdate-uncorrelated-reader-ear-1.0.0-SNAPSHOT", 
+      'new':"imdate-uncorrelated-reader-ear (1.0.0)", 
       'old':'', 
       'target':JMS_CLUSTER, 
-      'package':ARTIFACT_DIR+'/mdbs/imdate-uncorrelated-reader-ear-1.0.0-SNAPSHOT.ear'},
+      'package':ARTIFACT_DIR+'/mdbs/imdate-uncorrelated-reader-ear-1.0.0.ear'},
     {
-      'new':"imdate-users-service-ejbws-1.0.6-SNAPSHOT-jar-with-dependencies", 
+      'new':"imdate-users-service-ejbws (1.0.6)", 
       'old':'', 
       'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/webapps/imdate-users-service-ejbws-1.0.6-SNAPSHOT-jar-with-dependencies.jar'},
+      'package':ARTIFACT_DIR+'/web-modules/imdate-users-service-ejbws-1.0.6-jar-with-dependencies.jar'},
     {
-      'new':"imdate-video-ear-1.0.2-SNAPSHOT (1.0.2-SNAPSHOT)", 
+      'new':"imdate-video-ear (1.0.2)", 
       'old':'', 
       'target':"$APP_CLUSTER", 
-      'package':ARTIFACT_DIR+'/webapps/imdate-video-ear-1.0.2-SNAPSHOT (1.0.2-SNAPSHOT).jar'},
+      'package':ARTIFACT_DIR+'/web-modules/imdate-video-ear-1.0.2.ear'},
     {
-      'new':"imdate-wup-weblogic-ear-1.1.24-SNAPSHOT (1.1.24-SNAPSHOT)", 
+      'new':"imdate-wup-weblogic-ear (1.1.24)", 
       'old':'', 
       'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/webapps/imdate-wup-weblogic-ear-1.1.24-SNAPSHOT (1.1.24-SNAPSHOT).jar'},
+      'package':ARTIFACT_DIR+'/web-modules/imdate-wup-weblogic-ear-1.1.24.ear'},
     {
-      'new':"jolokia-war-1.0.6", 
+      'new':"jolokia-war (1.0.6)", 
       'old':'', 
       'target':JMS_CLUSTER + "," + APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/jolokia-war-1.0.6.jar'},
+      'package':ARTIFACT_DIR+'/jolokia-war-1.0.6.war'},
   ]
 
 for app in applications:

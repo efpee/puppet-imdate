@@ -18,7 +18,8 @@ try:
   
   execfile('jms_functions.py')
   execfile('create_jms_resources.py')
-  execfile('deploy_downsampling.py')
+  execfile('deploy_functions.py')
+  execfile('deploy_imdate.py')
 
   # save and activate editor, and disconnect
   save()

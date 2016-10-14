@@ -184,25 +184,9 @@ class imdate (
       minute              => 30,
     }
     
-    #TODO: to be enabled? alternate?
+    #TODO: alternate?
     cron {'incident-processing':
       command             => "$app_dir/bin/imdate-incident.sh  &> /dev/null",
-      user                => 'oracle',
-      hour                => '*',
-      minute              => '*/5',
-    }
-    
-    #TODO: to be enabled? alternate?
-    cron {'isif-reader':
-      command             => "$app_dir/bin/imdate-isif-reader.sh  &> /dev/null",
-      user                => 'oracle',
-      hour                => '*',
-      minute              => '*/5',
-    }
-    
-    #TODO: to be enabled? alternate?
-    cron {'vds-reader':
-      command             => "$app_dir/bin/imdate-vds-reader.sh  &> /dev/null",
       user                => 'oracle',
       hour                => '*',
       minute              => '*/5',
@@ -211,15 +195,19 @@ class imdate (
   
   exec{ "create_$app_dir":
     command             => "mkdir -p $app_dir & chown oracle:imdate $app_dir",
+    require             => [User['oracle'], Group['imdate']],
   } 
   exec{ "create_$log_dir":
     command             => "mkdir -p $log_dir & chown oracle:imdate $log_dir",
+    require             => [User['oracle'], Group['imdate']],
   } 
   exec{ "create_$conf_dir":
     command             => "mkdir -p $conf_dir & chown oracle:imdate $conf_dir",
+    require             => [User['oracle'], Group['imdate']],
   } 
   exec{ "create_$script_dir":
     command             => "mkdir -p $script_dir & chown oracle:imdate $script_dir",
+    require             => [User['oracle'], Group['imdate']],
   } 
     
   $imdate_dirs = [
