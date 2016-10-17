@@ -49,6 +49,8 @@ class imdate (
   $wls_jms_cluster      = 'imdateJmsCluster',
   $wls_jms_servers      = ['imdateJmsSrv1', 'imdateJmsSrv2', 'imdateJmsSrv3', 'imdateJmsSrv4'],
   
+  $jdk_dir              = '/oracle/jdk',
+  
   $jdbc_jndi            = 'jdbc.imdate.imdateusr',
   $jdbc_url             = '',
   $jdbc_grid_url        = '',
@@ -65,6 +67,10 @@ class imdate (
   $svn_pass             = '',
   $svn_tag              = '',
   $svn_server           = '',
+
+  $sftp_server           = '',
+  $sftp_user             = '',
+  $sftp_pass             = '',
   
   $run_cron_jobs        = true,
   
@@ -77,12 +83,12 @@ class imdate (
   $load_balanced_app_server_url     = '',
   $load_balanced_jms_server_url     = '',
   $load_balanced_http_server_url    = '',
-  $app_managed_servers  = [],
-  $jms_managed_servers  = [],
-  $jms_server_prefix    = 'ImdateJMSServer',
-  $db_commit_treshold   = 1000,
-  $db_commit_interval   = 120000,
-  $cache_expiration     = 1440,
+  $app_managed_servers              = [],
+  $jms_managed_servers              = [],
+  $jms_server_prefix                = 'ImdateJMSServer',
+  $db_commit_treshold               = 1000,
+  $db_commit_interval               = 120000,
+  $cache_expiration                 = 1440,
   
   $distribution_processors          = 300,
   $distribution_aggregation         = 10,
@@ -139,7 +145,10 @@ class imdate (
 		['/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/']
 	}
 
-  $packages = [ 'vim','tree','subversion','wget']
+  case $operatingsystem {
+    'RedHat', 'CentOS': {$packages = ['vim-enhanced', 'tree', 'subversion', 'wget']}
+    default:            {$packages = ['vim','tree','subversion','wget']}
+  }
   ensure_packages($packages)
 
   $conf_dir             = "$app_dir/conf"
@@ -166,80 +175,63 @@ class imdate (
     groups              => 'imdate',
     require             => Group['imdate'],
   }
-
-  #TODO: crontabs should alternate on machines?
-  if $run_cron_jobs {
-    cron {'dist-cleaner':
-      command             => "$app_dir/bin/imdate-csn-dist-cleaner.sh  &> /dev/null",
-      user                => 'oracle',
-      hour                => '*/2',
-      minute              => 0,
-    }
-    
-    #TODO: crontabs should alternate on machines?
-    cron {'db-cleaner':
-      command             => "$app_dir/bin/imdate-database-cleaner.sh  &> /dev/null",
-      user                => 'oracle',
-      hour                => 6,
-      minute              => 30,
-    }
-    
-    #TODO: alternate?
-    cron {'incident-processing':
-      command             => "$app_dir/bin/imdate-incident.sh  &> /dev/null",
-      user                => 'oracle',
-      hour                => '*',
-      minute              => '*/5',
-    }
-  }
   
   exec{ "create_$app_dir":
-    command             => "mkdir -p $app_dir & chown oracle:imdate $app_dir",
-    require             => [User['oracle'], Group['imdate']],
+    command             => "mkdir -p $app_dir",
+    before              => Exec["chown_$app_dir"],
   } 
   exec{ "create_$log_dir":
-    command             => "mkdir -p $log_dir & chown oracle:imdate $log_dir",
-    require             => [User['oracle'], Group['imdate']],
+    command             => "mkdir -p $log_dir",
+    before              => Exec["chown_$app_dir"],
   } 
   exec{ "create_$conf_dir":
-    command             => "mkdir -p $conf_dir & chown oracle:imdate $conf_dir",
-    require             => [User['oracle'], Group['imdate']],
+    command             => "mkdir -p $conf_dir",
+    before              => Exec["chown_$app_dir"],
   } 
   exec{ "create_$script_dir":
-    command             => "mkdir -p $script_dir & chown oracle:imdate $script_dir",
+    command             => "mkdir -p $script_dir",
+    before              => Exec["chown_$app_dir"],
+  } 
+  exec{ "chown_$app_dir":
+    command             => "chown -R oracle:imdate $app_dir",
     require             => [User['oracle'], Group['imdate']],
   } 
     
+    
   $imdate_dirs = [
-    "$conf_dir/wsdl", 
-    "$script_dir/wlst", 
-    "$script_dir/svn", 
+    "$app_dir/aux-data", 
     "$app_dir/data",
     "$app_dir/data/acq", 
     "$app_dir/data/acq/quarantine", 
     "$app_dir/data/acq/quarantine/savasnod", 
-    "$app_dir/aux-data", 
+    "$app_dir/failed", 
+    "$app_dir/failed/cdf", 
+    "$app_dir/failed/distribution",
+    "$app_dir/failed/vds", 
     "$app_dir/incident_working_dir", 
     "$app_dir/incident_working_dir/stage", 
     "$app_dir/incident_working_dir/archive", 
     "$app_dir/incident_working_dir/error", 
-    "$app_dir/working_dirs", 
-    "$app_dir/working_dirs/radar-isif", 
-    "$app_dir/working_dirs/radar-isif/inbox", 
-    "$app_dir/working_dirs/radar-isif/stage", 
-    "$app_dir/working_dirs/radar-isif/archive", 
-    "$app_dir/working_dirs/radar-isif/error", 
-    "$app_dir/working_dirs/vds_reader", 
-    "$app_dir/working_dirs/vds_reader/inbox", 
-    "$app_dir/working_dirs/vds_reader/stage", 
-    "$app_dir/working_dirs/vds_reader/archive", 
-    "$app_dir/working_dirs/vds_reader/error", 
     "$app_dir/jasper_templates", 
+    "$app_dir/libs", 
     "$app_dir/tmp", 
     "$app_dir/tmp/cap_reports_resources", 
-    "$app_dir/failed/vds", 
-    "$app_dir/failed/cdf", 
-    "$app_dir/failed/distribution"]
+    "$app_dir/working_dirs", 
+    "$app_dir/working_dirs/radar-isif", 
+    "$app_dir/working_dirs/radar-isif/archive", 
+    "$app_dir/working_dirs/radar-isif/error", 
+    "$app_dir/working_dirs/radar-isif/inbox", 
+    "$app_dir/working_dirs/radar-isif/stage", 
+    "$app_dir/working_dirs/vds_reader", 
+    "$app_dir/working_dirs/vds_reader/archive", 
+    "$app_dir/working_dirs/vds_reader/error", 
+    "$app_dir/working_dirs/vds_reader/inbox", 
+    "$app_dir/working_dirs/vds_reader/stage", 
+    "$conf_dir/wsdl", 
+    "$script_dir/jobs", 
+    "$script_dir/svn", 
+    "$script_dir/wlst", 
+  ]
 
   file { $imdate_dirs:
     ensure              => 'directory',
@@ -247,14 +239,105 @@ class imdate (
     group               => 'imdate',
     mode                => '0755',
   }
+
+  # These should be removed after code has been refactored to allow for new file
+  # locations.
+  #
   
+  $special_dirs = [
+    "/wl_domains",
+    "/wl_domains/imdate",
+  ]
+    
+  file { $special_dirs:
+    ensure              => 'directory',
+    owner               => 'oracle',
+    group               => 'imdate',
+    mode                => '0755',
+    purge               => 'false',
+  }
+  
+  file {'/wl_domains/imdate/imdate-apps':
+    ensure              => 'link',
+    target              => $app_dir,
+  }
+  
+  #
+  # End of special dirs 
+  
+  if $run_cron_jobs {
+    file {"$script_dir/jobs/csn-dist-cleaner.sh":
+      ensure            => 'present',
+      owner             => 'oracle',
+      group             => 'imdate',
+      mode              => '0755',
+      content           => epp('imdate/jobs/java-runner.sh.epp', {'jarname' => 'it.acsys.imdate.csndccleaner.CsndcDistsDBCleaner', 'mainclass' => 'it.acsys.imdate.csndccleaner.CsndcDistsDBCleaner'}),
+    }
+
+    #TODO: crontabs should alternate on machines?
+    cron {'dist-cleaner':
+      command           => "$script_dir/jobs/csn-dist-cleaner.sh &> /dev/null",
+      user              => 'oracle',
+      hour              => '*/2',
+      minute            => 0,
+    }
+
+    file {"$script_dir/jobs/database-cleaner.sh":
+      ensure            => 'present',
+      owner             => 'oracle',
+      group             => 'imdate',
+      mode              => '0755',
+      content           => epp('imdate/jobs/java-runner.sh.epp', {'jarname' => 'imdate-database-cleaner.jar', 'mainclass' => 'it.acsys.imdate.dbcleaner.OracleDBCleaner'}),
+    }
+    
+    #TODO: crontabs should alternate on machines?
+    cron {'imdate-db-cleaner':
+      command           => "$script_dir/jobs/database-cleaner.sh &> /dev/null",
+      user              => 'oracle',
+      hour              => 6,
+      minute            => 30,
+    }
+    
+    file {"$script_dir/jobs/incidents.sh":
+      ensure            => 'present',
+      owner             => 'oracle',
+      group             => 'imdate',
+      mode              => '0755',
+      content           => epp('imdate/jobs/java-runner.sh.epp', {'jarname' => 'imdate-incident.jar', 'mainclass' => 'it.acsys.imdate.ingestion.IncidentsIngestion'}),
+    }
+    
+    #TODO: alternate?
+    cron {'incident-processing':
+      command             => "$app_dir/bin/imdate-incident.sh &> /dev/null",
+      user                => 'oracle',
+      hour                => '*',
+      minute              => '*/5',
+    }
+    
+    file { "$script_dir/jobs/imdate-sftp.sh":
+      ensure              => 'present',
+      owner               => 'oracle',
+      group               => 'imdate',
+      mode                => '0755',
+      content             => epp('imdate/jobs/imdate-sftp.sh'),
+    }
+
+    #TODO: alternate?
+    cron {'imdate-sftp':
+      command             => "$script_dir/jobs/imdate-sftp.sh &> /dev/null",
+      user                => 'oracle',
+      hour                => '*',
+      minute              => '1-59/2',
+    }
+
+  }
+
 # TODO: resolve variable scope problem in template
 #  $epp_templates = ['imdate.port', 'imdate-cap-reader.conf']
 # 
 #  file {"$app_dir/$epp_templates":
 #    content             => template("imdate/conf/$epp_templates.erb"),
 #  }
-
 
   File {
     ensure              => 'present',
