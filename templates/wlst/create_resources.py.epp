@@ -18,6 +18,8 @@ try:
   
   execfile('jms_functions.py')
   execfile('create_jms_resources.py')
+  execfile('datasource_functions.py')
+  execfile('create_datasources.py')
   execfile('deploy_functions.py')
   execfile('deploy_imdate.py')
 

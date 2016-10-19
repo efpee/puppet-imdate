@@ -8,7 +8,7 @@ configurationFile.version=1.0
 # 
 ##################
 connectionFactory=imdate.ConnectionFactory
-providerUrl= <%= $imdate::jms_managed_servers.join(',') %>
+providerUrl= t3://<%= $imdate::jms_managed_servers.join(',') %>
 username= <%= $imdate::wls_user %>
 password= <%= $imdate::wls_pass %>
 ##################

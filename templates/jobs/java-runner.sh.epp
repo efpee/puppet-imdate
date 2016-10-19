@@ -1,0 +1,19 @@
+<%- |String $jarname, String $mainclass, String $user = 'oracle'| -%>
+#!/bin/bash
+
+JAVA_HOME=<%= $imdate::jdk_dir %>
+
+# To override WL_HOME
+[ -e /etc/sysconfig/imdate ] && source /etc/sysconfig/imdate
+JAVA=$JAVA_HOME/bin/java
+
+IMDATE_PATH=<%= $imdate::app_dir %>
+USER=oracle
+JARNAME=<%= $jarname %>
+APPNAME=$(echo $JARNAME | sed -e "s/\..*$//g")
+MAINCLASS=<%= $mainclass %>
+
+[ $UID -eq 0 ] && su - <%= $user %>
+
+$JAVA -cp ${IMDATE_PATH}/bin/$JARNAME:$IMDATE_PATH/libs/${APPNAME}/* $MAINCLASS
+

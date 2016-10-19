@@ -29,7 +29,7 @@ datasource.jndi.name=<%= $imdate::jdbc_jndi %>
 #  if auth=true the service send a basic authentication request
 #
 ###################################
-thetis.wsdl.endpoint<%= $imdate::service_thetis %>/ShipProxyService?WSDL
+thetis.wsdl.endpoint=<%= $imdate::service_thetis %>/ShipProxyService?WSDL 
 thetis.wsdl.auth=<%= $imdate::service_thetis_auth %>
 thetis.wsdl.password=<%= $imdate::service_thetis_pass %>
 thetis.wsdl.username=<%= $imdate::service_thetis_user %>

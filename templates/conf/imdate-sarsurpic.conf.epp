@@ -4,7 +4,7 @@ configurationFile.version=1.0
 ############ MODULE CONFIGURATION ############
 db.data-source = jdbc.imdate.imdateusr
 
-jms.provider-url = <%= $imdate::jms_managed_servers.join(',') %>
+jms.provider-url = t3://<%= $imdate::jms_managed_servers.join(',') %>
 jms.connection-factory = imdate.ConnectionFactory
 jms.destination = imdate.sarsurpic.queue
 jms.username = <%= $imdate::wls_user %>
@@ -16,8 +16,8 @@ surpic.error.threshold = <%= $imdate::sarsurpic_soft_limit %>
 surpic.hours = <%= $imdate::sarsurpic_limit_by_hours %>
 
 lrit.userid = 9143
-lrit.endpoint = <%= $imdate::services_lrit_ws %>
-lrit.from = IMDATE
+lrit.endpoint = <%= $imdate::service_lrit_ws %>
+lrit.from = <%= $imdate::service_lrit_from %>
 lrit.to = EU_LRIT_DC
 
 ############ LOG CONFIGURATION ############

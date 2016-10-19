@@ -51,11 +51,15 @@ class imdate (
   
   $jdk_dir              = '/oracle/jdk',
   
-  $jdbc_jndi            = 'jdbc.imdate.imdateusr',
+  $jdbc_driver          = 'oracle.jdbc.xa.client.OracleXADataSource'
+  $jdbc_jndi            = 'jdbc.imdate.imdateds',
   $jdbc_url             = '',
   $jdbc_grid_url        = '',
   $jdbc_user            = '',
   $jdbc_pass            = '',
+  $jdbc_init capacity   = 1,
+  $jdbc_min_capacity    = 1,
+  $jdbc_max_capacity    = 5,
   $jdbc_url_satais      = '',
   $jdbc_user_satais     = '',
   $jdbc_pass_satais     = '',
@@ -122,6 +126,8 @@ class imdate (
   $service_wfs          = '',
   $service_solr         = '',
   $service_lrit_ws      = '',
+  $service_lrit_from     = '',
+  
   $service_zookeeper_is_master      = false,
   
   $service_ssn          = '',
@@ -410,6 +416,9 @@ class imdate (
   file {"$app_dir/conf/imdate-ovr-reader.conf":
     content             => epp('imdate/conf/imdate-ovr-reader.conf.epp'),
   } ->
+  file {"$app_dir/conf/imdate-ovr-service.conf":
+    content             => epp('imdate/conf/imdate-ovr-service.conf.epp'),
+  } ->
   file {"$app_dir/conf/imdate-positions-service.conf":
     content             => epp('imdate/conf/imdate-positions-service.conf.epp'),
     mode                => '0600',
@@ -482,6 +491,17 @@ class imdate (
 		content	=> epp('imdate/wlst/create_jms_resources.py.epp'),
 		mode    => '0755',
 	} ->
+
+  exec {'fetch_datasource_functions':
+    command	=> "wget https://github.com/efpee/wlst/blob/master/datasource_functions.py -O $script_dir/wlst/datasource_functions.py",
+		unless	=> "test -f $script_dir/wlst/deploy_functions.py",
+		require	=> Package['wget'],
+  } ->
+	
+	file {"$script_dir/wlst/create_datasources.py":
+		content	=> epp('imdate/wlst/create_datasources.py.epp'),
+		mode    => '0700',
+	} -> 
 
   exec {'fetch_deploy_functions':
     command	=> "wget https://github.com/efpee/wlst/blob/master/deploy_functions.py -O $script_dir/wlst/deploy_functions.py",

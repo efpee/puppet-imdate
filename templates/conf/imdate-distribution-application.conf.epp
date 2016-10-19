@@ -6,7 +6,7 @@ configurationFile.version=1.0
 db.data-source = <%= $imdate::jdbc_jndi %>
 
 processors-configuration.period.seconds = <%= $imdate::distribution_processors %>
-aggregation.period.seconds = <%= $imdate::istribution_aggregation %>
+aggregation.period.seconds = <%= $imdate::distribution_aggregation %>
 aggregation.timeout.seconds = <%= $imdate::distribution_aggregation_timeout %>
 conversion.period.seconds = <%= $imdate::distribution_conversion %>
 distribution.period.seconds = <%= $imdate::distribution_period %>
