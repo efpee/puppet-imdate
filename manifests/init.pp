@@ -44,6 +44,7 @@ class imdate (
   $wls_user             = '',
   $wls_pass             = '',
   $wls_admin_url        = '',
+  $wls_domain_dir       = '/wl_domains/imdate',
   $wls_app_cluster      = 'imdateAppCluster',
   $wls_app_servers      = ['imdateAppSrv1', 'imdateAppSrv2'],
   $wls_jms_cluster      = 'imdateJmsCluster',
@@ -51,15 +52,16 @@ class imdate (
   
   $jdk_dir              = '/oracle/jdk',
   
-  $jdbc_driver          = 'oracle.jdbc.xa.client.OracleXADataSource'
+  $jdbc_driver          = 'oracle.jdbc.xa.client.OracleXADataSource',
   $jdbc_jndi            = 'jdbc.imdate.imdateds',
   $jdbc_url             = '',
   $jdbc_grid_url        = '',
   $jdbc_user            = '',
   $jdbc_pass            = '',
-  $jdbc_init capacity   = 1,
+  $jdbc_init_capacity   = 1,
   $jdbc_min_capacity    = 1,
   $jdbc_max_capacity    = 5,
+  $jdbc_jndi_user       = 'jdbc.imdate.imdateusr',
   $jdbc_url_satais      = '',
   $jdbc_user_satais     = '',
   $jdbc_pass_satais     = '',
@@ -482,7 +484,7 @@ class imdate (
 	} ->
 
   exec {'fetch_jms_functions':
-    command	=> "wget https://github.com/efpee/wlst/blob/master/jms_functions.py -O $script_dir/wlst/jms_functions.py",
+    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/master/jms_functions.py -O $script_dir/wlst/jms_functions.py",
 		unless	=> "test -f $script_dir/wlst/jms_functions.py",
 		require	=> Package['wget'],
   } ->
@@ -493,8 +495,8 @@ class imdate (
 	} ->
 
   exec {'fetch_datasource_functions':
-    command	=> "wget https://github.com/efpee/wlst/blob/master/datasource_functions.py -O $script_dir/wlst/datasource_functions.py",
-		unless	=> "test -f $script_dir/wlst/deploy_functions.py",
+    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/master/datasource_functions.py -O $script_dir/wlst/datasource_functions.py",
+		unless	=> "test -f $script_dir/wlst/datasource_functions.py",
 		require	=> Package['wget'],
   } ->
 	
@@ -504,7 +506,7 @@ class imdate (
 	} -> 
 
   exec {'fetch_deploy_functions':
-    command	=> "wget https://github.com/efpee/wlst/blob/master/deploy_functions.py -O $script_dir/wlst/deploy_functions.py",
+    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/master/deploy_functions.py -O $script_dir/wlst/deploy_functions.py",
 		unless	=> "test -f $script_dir/wlst/deploy_functions.py",
 		require	=> Package['wget'],
   } ->

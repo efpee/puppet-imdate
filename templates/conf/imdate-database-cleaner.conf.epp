@@ -23,7 +23,7 @@ daysToKeep.savas = <%= $imdate::retention_period_savas %>
 
 #######################################################
 # number of days to create in the database partitions
-daysToCreate = <%= $imdate::db_partions_to_create %>
+daysToCreate = <%= $imdate::db_partitions_to_create %>
 
 #######################################################
 # Simulation mode: if True, queries are not executed, 

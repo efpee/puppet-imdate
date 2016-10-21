@@ -60,7 +60,7 @@ isArchived = true
 #
 # Define the root logger with appender file
 #
-log = <%= $imdate::log_dir -%>
+log = <%= $imdate::log_dir %>
 log4j.rootLogger = <%= $imdate::log_level %>, FILE
 # Define the file appender
 log4j.appender.FILE=org.apache.log4j.FileAppender
