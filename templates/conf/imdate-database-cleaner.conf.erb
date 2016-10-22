@@ -23,7 +23,7 @@ daysToKeep.savas = <%= @retention_period_savas %>
 
 #######################################################
 # number of days to create in the database partitions
-daysToCreate = "<%= @db_partions_to_create %>"
+daysToCreate = "<%= @db_partitions_to_create %>"
 
 #######################################################
 # Simulation mode: if True, queries are not executed, 
@@ -38,10 +38,10 @@ simulationMode = FALSE
   s_p = server.split(':')
 -%>
 weblogic.urls = <%= server -%>
-weblogic.<%= s_p[0]-%>_<%= s_p[1]-%>.username = <%= @wls_user -%>
-weblogic.<%= s_p[0]-%>_<%= s_p[1]-%>.password = <%= @wls_pass -%>
-weblogic.<%= s_p[0]-%>_<%= s_p[1]-%>.t3.username = <%= @wls_user -%>
-weblogic.<%= s_p[0]-%>_<%= s_p[1]-%>.t3.password = <%= @wls_pass -%>
+weblogic.<%= s_p[0]-%>_<%= s_p[1]-%>.username = <%= @jms_user -%>
+weblogic.<%= s_p[0]-%>_<%= s_p[1]-%>.password = <%= @jms_pass -%>
+weblogic.<%= s_p[0]-%>_<%= s_p[1]-%>.t3.username = <%= @jms_user -%>
+weblogic.<%= s_p[0]-%>_<%= s_p[1]-%>.t3.password = <%= @jms_pass -%>
 weblogic.<%= s_p[0]-%>_<%= s_p[1]-%>.jms.node.name = <%= @jms_server_prefix -%><%= i+1 -%>
 <% } %>
 

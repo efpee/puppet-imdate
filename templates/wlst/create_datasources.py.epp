@@ -3,9 +3,12 @@ password = '<%= $imdate::jdbc_pass %>'
 url = '<%= $imdate::jdbc_url %>'
 driver = '<%= $imdate::jdbc_driver %>'
 
+appCluster = cmo.lookupCluster('<%= $imdate::wls_app_cluster %>')
+jmsCluster = cmo.lookupCluster('<%= $imdate::wls_jms_cluster %>')
 
-createJDBCDataSource('jdbc.imdate.imdateds', 'jdbc.imdate.imdateds', ['<%= $imdate::wls_app_cluster %>', '<%= $imdate::wls_jms_cluster %>'], driver, url, user, password, initialCapacity=<%= $imdate::jdbc_init_capacity %>, minCapacity=<%= $imdate::jdbc_min_capacity %>, maxCapacity=<%= $imdate::jdbc_max_capacity %>):
 
-createJDBCDataSource('jdbc.imdate.imdateusr', 'jdbc.imdate.imdateusr', '<%= $imdate::wls_app_cluster %>', driver, url, user, password, initialCapacity=1, minCapacity=1, maxCapacity=5):
+createJDBCDataSource('<%= $imdate::jdbc_jndi %>', '<%= $imdate::jdbc_jndi %>', [appCluster, jmsCluster], driver, url, user, password, initialCapacity=<%= $imdate::jdbc_init_capacity %>, minCapacity=<%= $imdate::jdbc_min_capacity %>, maxCapacity=<%= $imdate::jdbc_max_capacity %>)
 
-createJDBCDataSource('jdbc.imdate.longTransactions', 'jdbc.imdate.longTransactions', '<%= $imdate::wls_jms_cluster %>', driver, url, user, password, initialCapacity=1, minCapacity=1, maxCapacity=5):
+createJDBCDataSource('<%= $imdate::jdbc_jndi_user %>', '<%= $imdate::jdbc_jndi_user %>', [appCluster], driver, url, user, password, initialCapacity=1, minCapacity=1, maxCapacity=5)
+
+createJDBCDataSource('jdbc.imdate.longTransactions', 'jdbc.imdate.longTransactions', [jmsCluster], driver, url, user, password, initialCapacity=1, minCapacity=1, maxCapacity=5)

@@ -66,6 +66,9 @@ class imdate (
   $jdbc_user_satais     = '',
   $jdbc_pass_satais     = '',
 
+  $jms_user             = '',
+  $jms_pass             = '',
+
   $smtp_host            = '127.0.0.1',
   $smtp_port            = '25',
   
@@ -279,17 +282,27 @@ class imdate (
       owner             => 'oracle',
       group             => 'imdate',
       mode              => '0755',
-      content           => epp('imdate/jobs/java-runner.sh.epp', {'jarname' => 'it.acsys.imdate.csndccleaner.CsndcDistsDBCleaner', 'mainclass' => 'it.acsys.imdate.csndccleaner.CsndcDistsDBCleaner'}),
+      content           => epp('imdate/jobs/java-runner.sh.epp', {'jarname' => 'imdate-csn-dist-cleaner.jar', 'mainclass' => 'it.acsys.imdate.csndccleaner.CsndcDistsDBCleaner'}),
     }
 
     #TODO: crontabs should alternate on machines?
-    cron {'dist-cleaner':
-      command           => "$script_dir/jobs/csn-dist-cleaner.sh &> /dev/null",
-      user              => 'oracle',
-      hour              => '*/2',
-      minute            => 0,
-    }
+#    cron {'dist-cleaner':
+#      command           => "$script_dir/jobs/csn-dist-cleaner.sh &> /dev/null",
+#      user              => 'oracle',
+#      hour              => '*/2',
+#      minute            => 0,
+#    }
 
+    if ($operatingsystem in ['RedHat', 'CentOS']) {
+      exec {'extract-imdate-db-cleaner':
+        command           => "rpm -i $app_dir/deployments/imdate-database-cleaner-1.0.23-1.noarch.rpm",
+      }
+
+      exec {'extract-imdate-incident':
+        command           => "rpm -i $app_dir/deployments/imdate-incident-1.0.11-1.noarch.rpm",
+      }
+    }
+    
     file {"$script_dir/jobs/database-cleaner.sh":
       ensure            => 'present',
       owner             => 'oracle',
@@ -305,7 +318,7 @@ class imdate (
       hour              => 6,
       minute            => 30,
     }
-    
+
     file {"$script_dir/jobs/incidents.sh":
       ensure            => 'present',
       owner             => 'oracle',
@@ -327,7 +340,7 @@ class imdate (
       owner               => 'oracle',
       group               => 'imdate',
       mode                => '0755',
-      content             => epp('imdate/jobs/imdate-sftp.sh'),
+      content             => epp('imdate/jobs/imdate-sftp.sh.epp'),
     }
 
     #TODO: alternate?
@@ -355,6 +368,9 @@ class imdate (
     backup              => true,
   }
    
+  file {"$app_dir/conf/AREA_CATEGORIES.csv":
+    source              => puppet:///modules/imdate/AREA_CATEGORIES.csv,
+  } ->   
   file {"$app_dir/conf/imdate.port":
     content             => epp('imdate/conf/imdate.port.epp'),
   } ->
@@ -476,7 +492,13 @@ class imdate (
   exec {'fetch_from_svn':
     command             => "$script_dir/svn/fetch_from_svn.sh",  
     #onlyif                  => $svn_server and $svn_user and $svn_pass and $svn_tag
-  } ->
+  }
+
+  if ($operatingsystem in ['RedHat', 'CentOS']) {
+    exec {'extract-imdate-aux-data':
+      command             => "rpm -i $app_dir/deployments/imdate-aux-data-1-1.8.noarch.rpm",
+    } 
+  }
 
 	file {"$script_dir/wlst/connect.py":
 		content	=> epp('imdate/wlst/connect.py.epp'),
@@ -484,7 +506,7 @@ class imdate (
 	} ->
 
   exec {'fetch_jms_functions':
-    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/master/jms_functions.py -O $script_dir/wlst/jms_functions.py",
+    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.0/jms_functions.py -O $script_dir/wlst/jms_functions.py",
 		unless	=> "test -f $script_dir/wlst/jms_functions.py",
 		require	=> Package['wget'],
   } ->
@@ -495,7 +517,7 @@ class imdate (
 	} ->
 
   exec {'fetch_datasource_functions':
-    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/master/datasource_functions.py -O $script_dir/wlst/datasource_functions.py",
+    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.0/datasource_functions.py -O $script_dir/wlst/datasource_functions.py",
 		unless	=> "test -f $script_dir/wlst/datasource_functions.py",
 		require	=> Package['wget'],
   } ->
@@ -506,7 +528,7 @@ class imdate (
 	} -> 
 
   exec {'fetch_deploy_functions':
-    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/master/deploy_functions.py -O $script_dir/wlst/deploy_functions.py",
+    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.0/deploy_functions.py -O $script_dir/wlst/deploy_functions.py",
 		unless	=> "test -f $script_dir/wlst/deploy_functions.py",
 		require	=> Package['wget'],
   } ->

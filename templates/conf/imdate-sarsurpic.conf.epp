@@ -7,8 +7,8 @@ db.data-source = jdbc.imdate.imdateusr
 jms.provider-url = t3://<%= $imdate::jms_managed_servers.join(',') %>
 jms.connection-factory = imdate.ConnectionFactory
 jms.destination = imdate.sarsurpic.queue
-jms.username = <%= $imdate::wls_user %>
-jms.password = <%= $imdate::wls_pass %>
+jms.username = <%= $imdate::jms_user %>
+jms.password = <%= $imdate::jms_pass %>
 
 surpic.enough.threshold = <%= $imdate::sarsurpic_soft_limit %>
 surpic.error.threshold = <%= $imdate::sarsurpic_soft_limit %>

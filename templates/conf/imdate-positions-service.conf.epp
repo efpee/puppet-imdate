@@ -14,8 +14,8 @@ smartVesselSearch.maxRecords= <%= $imdate::smart_vessel_search_limit %>
 jms.provider-url=t3://<%= $imdate::jms_managed_servers.join(',') %>
 jms.connection-factory=imdate.ConnectionFactory
 jms.uncorrelated.queue=imdate.uncorrelated.queue
-jms.username=<%= $imdate::wls_user %>
-jms.password=<%= $imdate::wls_pass %>
+jms.username=<%= $imdate::jms_user %>
+jms.password=<%= $imdate::jms_pass %>
 
 oes.enabled=false
 ############ LOG CONFIGURATION ############

@@ -31,4 +31,4 @@ try:
 except:
   print 'Error while trying to save and/or activate!!!'
   dumpStack()
-  # FOR DEBUG cancelEdit('y')
+  cancelEdit('y')

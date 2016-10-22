@@ -53,5 +53,5 @@ for queue in QUEUES:
   createUniformDistributedQueue(jmsResource, queue, queue, JMS_SUBDEPLOYMENT, t, FORWARD_DELAY)
 
 for topic in TOPICS:
-  createUniformDistributedTopic(jmsResource, topic, topic, JMS_SUBDEPLOYMENT, TIME_TO_LIVE, FORWARD_DELAY)
+  createUniformDistributedTopic(jmsResource, topic, topic, JMS_SUBDEPLOYMENT, TIME_TO_LIVE)
 

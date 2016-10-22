@@ -23,7 +23,7 @@ applications = [
       'new':"imdate-distribution-application-ear (1.0.15)", 
       'old':'', 
       'target':APP_CLUSTER, 
-      'package':ARTIFACT_DIR+'/web-modules/imdate-distribution-application-ear-1.0.15.jar'},
+      'package':ARTIFACT_DIR+'/web-modules/imdate-distribution-application-ear-1.0.15.ear'},
     {
       'new':"imdate-distribution-processors-ejb (1.0.14)", 
       'old':'', 
@@ -82,7 +82,7 @@ applications = [
     {
       'new':"imdate-ssn-server-ws (1.0.10)", 
       'old':'', 
-      'target':"$APP_CLUSTER", 
+      'target':APP_CLUSTER, 
       'package':ARTIFACT_DIR+'/web-modules/imdate-ssn-server-ws-1.0.10.war'},
     {
       'new':"imdate-ssn-service-ear (1.0.3)", 
@@ -102,7 +102,7 @@ applications = [
     {
       'new':"imdate-video-ear (1.0.2)", 
       'old':'', 
-      'target':"$APP_CLUSTER", 
+      'target':APP_CLUSTER, 
       'package':ARTIFACT_DIR+'/web-modules/imdate-video-ear-1.0.2.ear'},
     {
       'new':"imdate-wup-weblogic-ear (1.1.24)", 
@@ -117,5 +117,5 @@ applications = [
   ]
 
 for app in applications:
-  deployAplication(newName=app['new'], oldName=app['old']', servers=app['target'], package=app['package'])
+  deployApplication(newName=app['new'], oldName=app['old'], targets=app['target'], package=app['package'])
   
