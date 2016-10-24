@@ -166,15 +166,20 @@ class imdate (
   $log_dir              = "$app_dir/logs"
   $script_dir           = "$app_dir/scripts"
 
-  ensure_resource('group', 'oinstall', {ensure => 'present',})
+  ensure_resource('group', 'oinstall', 
+    {
+       ensure => 'present', 
+       gid => 115
+    }
+  )
 
-  if !defined(User['oracle']) {
-    ensure_resource('user', 'oracle', {
-                'ensure'          => present,
-                'managehome'      => true,
-                'groups'          => 'oinstall',
-                'require'         => Group['oinstall'],
-  })}
+  ensure_resource('user', 'oracle', {
+    'ensure'          => present,
+    'managehome'      => true,
+    'groups'          => 'oinstall',
+    'require'         => Group['oinstall'],
+    'gid'             => 115,
+  })
 
   group {'imdate':
     ensure              => 'present',
@@ -369,7 +374,7 @@ class imdate (
   }
    
   file {"$app_dir/conf/AREA_CATEGORIES.csv":
-    source              => puppet:///modules/imdate/AREA_CATEGORIES.csv,
+    source              => 'puppet:///modules/imdate/AREA_CATEGORIES.csv',
   } ->   
   file {"$app_dir/conf/imdate.port":
     content             => epp('imdate/conf/imdate.port.epp'),
@@ -484,15 +489,16 @@ class imdate (
   } ->
   file {"$app_dir/conf/OES_logging.properties":
     content             => epp('imdate/conf/OES_logging.properties.epp'),
-  } ->
-  file {"$script_dir/svn/fetch_from_svn.sh":
-    content             => epp('imdate/svn/fetch_from_svn.sh.epp'),
-    mode                => '0700',
-  } ->
-  exec {'fetch_from_svn':
-    command             => "$script_dir/svn/fetch_from_svn.sh",  
-    #onlyif                  => $svn_server and $svn_user and $svn_pass and $svn_tag
   }
+#   ->
+#  file {"$script_dir/svn/fetch_from_svn.sh":
+#    content             => epp('imdate/svn/fetch_from_svn.sh.epp'),
+#    mode                => '0700',
+#  } ->
+#  exec {'fetch_from_svn':
+#    command             => "$script_dir/svn/fetch_from_svn.sh",  
+#    #onlyif                  => $svn_server and $svn_user and $svn_pass and $svn_tag
+#  }
 
   if ($operatingsystem in ['RedHat', 'CentOS']) {
     exec {'extract-imdate-aux-data':
