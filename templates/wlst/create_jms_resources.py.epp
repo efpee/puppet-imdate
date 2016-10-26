@@ -19,7 +19,8 @@ QUEUES = (
     'imdate.l1.satais.queue',
     'imdate.l1.savas.queue',
     'imdate.ovr.queue',
-    'imdate.uncorrleated.queue')
+    'imdate.sarsurpic.queue',
+    'imdate.uncorrelated.queue')
 
 TOPICS = (
     'imdate.correlation.topic',

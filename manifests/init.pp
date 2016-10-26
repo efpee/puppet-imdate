@@ -158,7 +158,7 @@ class imdate (
 
   case $operatingsystem {
     'RedHat', 'CentOS': {$packages = ['vim-enhanced', 'tree', 'subversion', 'wget']}
-    default:            {$packages = ['vim','tree','subversion','wget']}
+    default:            {$packages = ['vim', 'tree', 'subversion', 'wget']}
   }
   ensure_packages($packages)
 

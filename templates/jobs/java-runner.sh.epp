@@ -1,4 +1,4 @@
-<%- |String $jarname, String $mainclass, String $user = 'oracle'| -%>
+<%- |$jarname, $mainclass, $user = 'oracle'| -%>
 #!/bin/bash
 
 JAVA_HOME=<%= $imdate::jdk_dir %>
