@@ -164,8 +164,8 @@ class imdate (
 	}
 
   case $operatingsystem {
-    'RedHat', 'CentOS': {$packages = ['vim-enhanced', 'tree', 'subversion', 'wget']}
-    default:            {$packages = ['vim', 'tree', 'subversion', 'wget']}
+    'RedHat', 'CentOS': {$packages = ['vim-enhanced', 'tree', 'wget']}
+    default:            {$packages = ['vim', 'tree', 'wget']}
   }
   ensure_packages($packages)
 
@@ -486,15 +486,6 @@ class imdate (
   file {"$app_dir/conf/OES_logging.properties":
     content             => epp('imdate/conf/OES_logging.properties.epp'),
   }
-#   ->
-#  file {"$script_dir/svn/fetch_from_svn.sh":
-#    content             => epp('imdate/svn/fetch_from_svn.sh.epp'),
-#    mode                => '0700',
-#  } ->
-#  exec {'fetch_from_svn':
-#    command             => "$script_dir/svn/fetch_from_svn.sh",  
-#    #onlyif                  => $svn_server and $svn_user and $svn_pass and $svn_tag
-#  }
 
   if ($operatingsystem in ['RedHat', 'CentOS']) {
     exec {'extract-imdate-aux-data':
@@ -508,7 +499,7 @@ class imdate (
 	} ->
 
   exec {'fetch_jms_functions':
-    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/master/jms_functions.py -O $script_dir/wlst/jms_functions.py",
+    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.2/jms_functions.py -O $script_dir/wlst/jms_functions.py",
 		unless	=> "test -f $script_dir/wlst/jms_functions.py",
 		require	=> Package['wget'],
   } ->
@@ -519,7 +510,7 @@ class imdate (
 	} ->
 
   exec {'fetch_datasource_functions':
-    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/master/datasource_functions.py -O $script_dir/wlst/datasource_functions.py",
+    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.2/datasource_functions.py -O $script_dir/wlst/datasource_functions.py",
 		unless	=> "test -f $script_dir/wlst/datasource_functions.py",
 		require	=> Package['wget'],
   } ->
@@ -530,7 +521,7 @@ class imdate (
 	} -> 
 
   exec {'fetch_deploy_functions':
-    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.0/deploy_functions.py -O $script_dir/wlst/deploy_functions.py",
+    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.2/deploy_functions.py -O $script_dir/wlst/deploy_functions.py",
 		unless	=> "test -f $script_dir/wlst/deploy_functions.py",
 		require	=> Package['wget'],
   } ->
