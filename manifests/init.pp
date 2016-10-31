@@ -52,7 +52,8 @@ class imdate (
   
   $jdk_dir              = '/oracle/jdk',
   
-  $jdbc_driver          = 'oracle.jdbc.xa.client.OracleXADataSource',
+  $jdbc_driver          = 'oracle.jdbc.OracleDriver',
+  $jdbc_xa_driver       = 'oracle.jdbc.xa.client.OracleXADataSource',
   $jdbc_jndi            = 'jdbc.imdate.imdateds',
   $jdbc_url             = '',
   $jdbc_grid_url        = '',
@@ -61,6 +62,8 @@ class imdate (
   $jdbc_init_capacity   = 1,
   $jdbc_min_capacity    = 1,
   $jdbc_max_capacity    = 5,
+  $jdbc_use_grid_link   = 'false',
+  $jdbc_grid_nodes      = '',
   $jdbc_jndi_user       = 'jdbc.imdate.imdateusr',
   $jdbc_url_satais      = '',
   $jdbc_user_satais     = '',
@@ -128,12 +131,15 @@ class imdate (
   $service_ccbr_wsdl    = '',
   $service_ccbr_user    = '',
   $service_ccbr_pass    = '',
-  $service_wfs          = '',
-  $service_solr         = '',
-  $service_lrit_ws      = '',
-  $service_lrit_from     = '',
   
-  $service_zookeeper_is_master      = false,
+  $service_identity_user = '',
+  
+  $service_wfs          = '',
+  
+  $service_solr         = '',
+  
+  $service_lrit_ws      = '',
+  $service_lrit_from    = '',
   
   $service_ssn          = '',
   $service_ssn_ovr      = '',
@@ -147,9 +153,10 @@ class imdate (
   $service_thetis_user  = '',
   $service_thetis_pass  = '',
 
-  $service_csn   = '',
+  $service_csn          = '',
 
-
+  $oinstall_gid         = 115,
+  $oracle_gid           = 115,
   
 ) {
 	Exec { path 	=>
@@ -169,7 +176,7 @@ class imdate (
   ensure_resource('group', 'oinstall', 
     {
        ensure => 'present', 
-       gid => 115
+       gid => "$oinstall_gid"
     }
   )
 
@@ -178,7 +185,7 @@ class imdate (
     'managehome'      => true,
     'groups'          => 'oinstall',
     'require'         => Group['oinstall'],
-    'gid'             => 115,
+    'gid'             => "$oracle_gid",
   })
 
   group {'imdate':
@@ -426,10 +433,6 @@ class imdate (
     content             => epp('imdate/conf/imdate-incident.conf.epp'),
     mode                => '0600',
   } ->
-  file {"$app_dir/conf/imdate-isif-reader.conf":
-    content             => epp('imdate/conf/imdate-isif-reader.conf.epp'),
-    mode                => '0600',
-  } ->
   file {"$app_dir/conf/imdate-L0L1-processor.conf":
     content             => epp('imdate/conf/imdate-L0L1-processor.conf.epp'),
   } ->
@@ -457,9 +460,6 @@ class imdate (
   file {"$app_dir/conf/imdate-sarsurpic-processor.conf":
     content             => epp('imdate/conf/imdate-sarsurpic-processor.conf.epp'),
   } ->
-    file {"$app_dir/conf/imdate-solr-writer-mdb.conf":
-    content             => epp('imdate/conf/imdate-solr-writer-mdb.conf.epp'),
-  } ->
   file {"$app_dir/conf/imdate-ssn-server-ws.conf":
     content             => epp('imdate/conf/imdate-ssn-server-ws.conf.epp'),
   } ->
@@ -471,10 +471,6 @@ class imdate (
   } ->
   file {"$app_dir/conf/imdate-users-service-ejbws.conf":
     content             => epp('imdate/conf/imdate-users-service-ejbws.conf.epp'),
-  } ->
-  file {"$app_dir/conf/imdate-vds-reader.conf":
-    content             => epp('imdate/conf/imdate-vds-reader.conf.epp'),
-    mode                => '0600',
   } ->
   file {"$app_dir/conf/imdate-video.conf":
     content             => epp('imdate/conf/imdate-video.conf.epp'),
@@ -512,7 +508,7 @@ class imdate (
 	} ->
 
   exec {'fetch_jms_functions':
-    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.0/jms_functions.py -O $script_dir/wlst/jms_functions.py",
+    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/master/jms_functions.py -O $script_dir/wlst/jms_functions.py",
 		unless	=> "test -f $script_dir/wlst/jms_functions.py",
 		require	=> Package['wget'],
   } ->
@@ -523,7 +519,7 @@ class imdate (
 	} ->
 
   exec {'fetch_datasource_functions':
-    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.0/datasource_functions.py -O $script_dir/wlst/datasource_functions.py",
+    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/master/datasource_functions.py -O $script_dir/wlst/datasource_functions.py",
 		unless	=> "test -f $script_dir/wlst/datasource_functions.py",
 		require	=> Package['wget'],
   } ->

@@ -2,7 +2,6 @@
 configurationFile.version=1.0
 
 ############ MODULE CONFIGURATION ############
-oes.enabled=false
 
 ###################################
 #  ssn services

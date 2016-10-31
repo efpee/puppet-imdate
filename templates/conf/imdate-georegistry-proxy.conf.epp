@@ -11,8 +11,6 @@ service.ccbr.password = <%= $imdate::service_ccbr_pass %>
 
 area.categories.csv.file=<%= $imdate::conf_dir %>/AREA_CATEGORIES.csv
 
-oes.enabled=false
-
 ############ LOG CONFIGURATION ############
 logLevel = <%= $imdate::log_level %>
 fileName = imdate-georegistry-proxy.log
