@@ -21,6 +21,5 @@ savasnod.jmx.port=11911
 
 savasnod.jolokia.port=11977
 savaseng.jolokia.port=11978
-#TODO: only 1 node?
 savasnod.jolokia.host=<%= $imdate::savasnod_jolokia_host %> 
 savaseng.jolokia.host=<%= $imdate::savaseng_jolokia_host %> 

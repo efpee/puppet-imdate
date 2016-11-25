@@ -2,17 +2,8 @@
 # IMDatE global properties
 # ================================================
 
-# NRT database properties
-# -----------------------------------------------
-
-#db.nrt.driver=oracle.jdbc.driver.OracleDriver
-#db.nrt.url=<%= $imdate::jdbc_url %>
-#db.nrt.username=<%= $imdate::jdbc_user %>
-#db.nrt.password=<%= $imdate::jdbc_pass %>
-
 # SATAIS database properties
 # -----------------------------------------------
-# TODO: different jndi / user / pass why?
 
 db.satais.driver=oracle.jdbc.driver.OracleDriver
 db.satais.url=<%= $imdate::jdbc_url_satais %>

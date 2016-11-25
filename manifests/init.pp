@@ -124,9 +124,14 @@ class imdate (
   
   $smart_vessel_search_limit        = 150,
   
-  $sarsurpic_soft_limit = 1000,
-  $sarsurpic_hard_limit = 2000,
-  $sarsurpic_limit_by_hours = 24,
+  $sarsurpic_soft_limit             = 1000,
+  $sarsurpic_hard_limit             = 2000,
+  $sarsurpic_limit_by_hours         = 24,
+  
+  $db_cleaner_rpm_version           = '',
+  $incident_rpm_version             = '',
+  $xquery_distributor_rpm_version   = '',
+  $aux_data_rpm_version             = '1-1.8',
     
   $service_ccbr_wsdl    = '',
   $service_ccbr_user    = '',
@@ -164,8 +169,8 @@ class imdate (
 	}
 
   case $operatingsystem {
-    'RedHat', 'CentOS': {$packages = ['vim-enhanced', 'tree', 'wget']}
-    default:            {$packages = ['vim', 'tree', 'wget']}
+    'RedHat', 'CentOS': {$packages = ['vim-enhanced', 'tree', 'wget', 'lftp']}
+    default:            {$packages = ['vim', 'tree', 'wget', 'lftp']}
   }
   ensure_packages($packages)
 
@@ -197,6 +202,14 @@ class imdate (
  		managehome	        => true,
     groups              => 'imdate',
     require             => Group['imdate'],
+  }
+  
+  File {
+    ensure              => 'present',
+    owner               => 'oracle',
+    group               => 'imdate',
+    mode                => '0644',
+    backup              => true,
   }
   
   exec{ "create_$app_dir":
@@ -252,14 +265,10 @@ class imdate (
     "$app_dir/working_dirs/vds_reader/stage", 
     "$conf_dir/wsdl", 
     "$script_dir/jobs", 
-    "$script_dir/svn", 
-    "$script_dir/wlst", 
   ]
 
   file { $imdate_dirs:
     ensure              => 'directory',
-    owner               => 'oracle',
-    group               => 'imdate',
     mode                => '0755',
   }
 
@@ -274,8 +283,6 @@ class imdate (
     
   file { $special_dirs:
     ensure              => 'directory',
-    owner               => 'oracle',
-    group               => 'imdate',
     mode                => '0755',
     purge               => 'false',
   }
@@ -283,6 +290,19 @@ class imdate (
   file {'/wl_domains/imdate/imdate-apps':
     ensure              => 'link',
     target              => $app_dir,
+  }
+  
+  $admin_dirs = [
+    "$script_dir/wlst", 
+    "$script_dir/sh",
+  ]
+  
+  file { $admin_dirs:
+    ensure              => 'directory',
+    mode                => '0750',
+    purge               => 'true',
+    owner               => 'oracle',
+    group               => 'oinstall',
   }
   
   #
@@ -307,11 +327,11 @@ class imdate (
 
     if ($operatingsystem in ['RedHat', 'CentOS']) {
       exec {'extract-imdate-db-cleaner':
-        command           => "rpm -i $app_dir/deployments/imdate-database-cleaner-1.0.23-1.noarch.rpm",
+        command           => "rpm -i $app_dir/deployments/imdate-database-cleaner-$db_cleaner_rpm_version.noarch.rpm",
       }
 
       exec {'extract-imdate-incident':
-        command           => "rpm -i $app_dir/deployments/imdate-incident-1.0.11-1.noarch.rpm",
+        command           => "rpm -i $app_dir/deployments/imdate-incident-$incident_rpm_version.noarch.rpm",
       }
     }
     
@@ -371,171 +391,172 @@ class imdate (
 #  file {"$app_dir/$epp_templates":
 #    content             => template("imdate/conf/$epp_templates.erb"),
 #  }
-
-  File {
-    ensure              => 'present',
-    owner               => 'oracle',
-    group               => 'imdate',
-    mode                => '0644',
-    backup              => true,
-  }
    
   file {"$app_dir/conf/AREA_CATEGORIES.csv":
     source              => 'puppet:///modules/imdate/AREA_CATEGORIES.csv',
-  } ->   
+  } 
   file {"$app_dir/conf/imdate.port":
     content             => epp('imdate/conf/imdate.port.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-cap-reader.conf":
     content             => epp('imdate/conf/imdate-cap-reader.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-csn-dist-cleaner.conf":
     content             => epp('imdate/conf/imdate-csn-dist-cleaner.conf.epp'),
     mode                => '0600',
-  } ->
+  } 
   file {"$app_dir/conf/imdate-database-cleaner.conf":
     content             => template('imdate/conf/imdate-database-cleaner.conf.erb'),
     mode                => '0600',
-  } ->
+  } 
   file {"$app_dir/conf/imdate-db-writer.conf":
     content             => epp('imdate/conf/imdate-db-writer.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-density-map-service.conf":
     content             => epp('imdate/conf/imdate-density-map-service.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-distribution-application.conf":
     content             => epp('imdate/conf/imdate-distribution-application.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-distribution-processors-ejb.conf":
     content             => epp('imdate/conf/imdate-distribution-processors-ejb.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-distribution-sender.conf":
     content             => epp('imdate/conf/imdate-distribution-sender.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-distribution-services.conf":
     content             => epp('imdate/conf/imdate-distribution-services.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-distributor.conf":
     content             => epp('imdate/conf/imdate-distributor.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-dist-surv.conf":
     content             => epp('imdate/conf/imdate-dist-surv.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-georegistry-proxy.conf":
     content             => epp('imdate/conf/imdate-georegistry-proxy.conf.epp'),
     mode                => '0600',
-  } ->
+  } 
     file {"$app_dir/conf/imdate-global.properties":
     content             => epp('imdate/conf/imdate-global.properties.epp'),
     mode                => '0600',
-  } ->
+  } 
   file {"$app_dir/conf/imdate-incident.conf":
     content             => epp('imdate/conf/imdate-incident.conf.epp'),
     mode                => '0600',
-  } ->
+  } 
   file {"$app_dir/conf/imdate-L0L1-processor.conf":
     content             => epp('imdate/conf/imdate-L0L1-processor.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-L0-reader.conf":
     content             => epp('imdate/conf/imdate-L0-reader.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-ovr-reader.conf":
     content             => epp('imdate/conf/imdate-ovr-reader.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-ovr-service.conf":
     content             => epp('imdate/conf/imdate-ovr-service.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-positions-service.conf":
     content             => epp('imdate/conf/imdate-positions-service.conf.epp'),
     mode                => '0600',
-  } ->
+  } 
   file {"$app_dir/conf/imdate-report-engine-surveillance.conf":
     content             => epp('imdate/conf/imdate-report-engine-surveillance.conf.epp'),
     mode                => '0600',
-  } ->
+  } 
   file {"$app_dir/conf/imdate-sarsurpic.conf":
     content             => epp('imdate/conf/imdate-sarsurpic.conf.epp'),
     mode                => '0600',
-  } ->
+  } 
   file {"$app_dir/conf/imdate-sarsurpic-processor.conf":
     content             => epp('imdate/conf/imdate-sarsurpic-processor.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-ssn-server-ws.conf":
     content             => epp('imdate/conf/imdate-ssn-server-ws.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-ssn-service.conf":
     content             => epp('imdate/conf/imdate-ssn-service.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-uncorrelated-reader.conf":
     content             => epp('imdate/conf/imdate-uncorrelated-reader.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-users-service-ejbws.conf":
     content             => epp('imdate/conf/imdate-users-service-ejbws.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-video.conf":
     content             => epp('imdate/conf/imdate-video.conf.epp'),
-  } ->
+  } 
   file {"$app_dir/conf/imdate-wup-weblogic.conf":
     content             => epp('imdate/conf/imdate-wup-weblogic.conf.epp'),
     mode                => '0600',
-  } ->
+  } 
   file {"$app_dir/conf/imdate-xquery-distributor.conf":
     content             => epp('imdate/conf/imdate-xquery-distributor.conf.epp'),
     mode                => '0600',
-  } ->
+  } 
   file {"$app_dir/conf/OES_logging.properties":
     content             => epp('imdate/conf/OES_logging.properties.epp'),
   }
 
   if ($operatingsystem in ['RedHat', 'CentOS']) {
     exec {'extract-imdate-aux-data':
-      command             => "rpm -i $app_dir/deployments/imdate-aux-data-1-1.8.noarch.rpm",
+      command             => "rpm -i $app_dir/deployments/imdate-aux-data-$aux_data_rpm_version.noarch.rpm",
     } 
   }
 
 	file {"$script_dir/wlst/connect.py":
 		content	=> epp('imdate/wlst/connect.py.epp'),
 		mode    => '0700',
-	} ->
-
+		require => File["$script_dir/wlst"]
+	} 
+	->
   exec {'fetch_jms_functions':
     command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.2/jms_functions.py -O $script_dir/wlst/jms_functions.py",
 		unless	=> "test -f $script_dir/wlst/jms_functions.py",
 		require	=> Package['wget'],
-  } ->
-  
+  } 
+  -> 
 	file {"$script_dir/wlst/create_jms_resources.py":
 		content	=> epp('imdate/wlst/create_jms_resources.py.epp'),
 		mode    => '0755',
-	} ->
-
+	} 
+	->
   exec {'fetch_datasource_functions':
     command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.2/datasource_functions.py -O $script_dir/wlst/datasource_functions.py",
 		unless	=> "test -f $script_dir/wlst/datasource_functions.py",
 		require	=> Package['wget'],
-  } ->
-	
+  } 
+	->
 	file {"$script_dir/wlst/create_datasources.py":
 		content	=> epp('imdate/wlst/create_datasources.py.epp'),
 		mode    => '0700',
-	} -> 
-
+	}  
+  ->
   exec {'fetch_deploy_functions':
     command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.2/deploy_functions.py -O $script_dir/wlst/deploy_functions.py",
 		unless	=> "test -f $script_dir/wlst/deploy_functions.py",
 		require	=> Package['wget'],
-  } ->
-	
+  } 
+	->
 	file {"$script_dir/wlst/deploy_imdate.py":
 		content	=> epp('imdate/wlst/deploy_imdate.py.epp'),
 		mode    => '0755',
-	} -> 
-
+	}  
+  ->
 	file {"$script_dir/wlst/create_resources.py":
 		content	=> epp('imdate/wlst/create_resources.py.epp'),
-		mode    => '0755',
+		mode    => '0700',
 	} 
   
+  file {"$script_dir/sh/set-ACLs.sh":
+    content => epp('imdate/sh/set-ACLs.sh.epp'),
+    mode    => '0755',
+  }
 
+  file {"$script_dir/sh/remove-ACLs.sh":
+    content => epp('imdate/sh/remove-ACLs.sh.epp'),
+    mode    => '0755',
+  }
 
 }

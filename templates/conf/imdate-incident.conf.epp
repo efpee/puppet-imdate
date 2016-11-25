@@ -7,9 +7,8 @@ configurationFile.version=1.0
 # For internal purpose, do not change this
 ###########################################
 
-urlIdentity = <%= $imdate::load_balanced_app_server_url -%>/ovrws/identity
+urlIdentity = <%= $imdate::load_balanced_app_server_url -%>/ovrws/imdateId
 identity.service.user = <%= $imdate::service_identity_user %>
-token = 1248126600
 
 ###############
 #

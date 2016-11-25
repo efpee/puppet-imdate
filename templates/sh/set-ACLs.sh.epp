@@ -1,0 +1,11 @@
+#!/bin/bash
+
+<% $servers = $imdate::wls_app_servers + $imdate::wls_jms_servers -%>
+
+<% $servers.each |$server| { -%>
+setfacl -m g:imdate:rx <%= $imdate::wls_domain_dir%>servers/<%= $server %> <%= $imdate::wls_domain_dir%>servers/<%= $server %>/logs
+setfacl -m d:g:imdate:r <%= $imdate::wls_domain_dir%>servers/<%= $server %>/logs
+setfacl -m d:g:imdate:r <%= $imdate::wls_domain_dir%>servers/<%= $server %>/logs/*out* <%= $imdate::wls_domain_dir%>servers/<%= $server %>/logs/*log*
+<% } -%>
+setfacl -m d:g:imdate:r <%= $imdate::log_dir%>
+setfacl -m g:imdate:r <%= $imdate::log_dir%>/*log*

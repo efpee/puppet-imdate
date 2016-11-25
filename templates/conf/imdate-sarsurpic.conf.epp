@@ -11,7 +11,7 @@ jms.username = <%= $imdate::jms_user %>
 jms.password = <%= $imdate::jms_pass %>
 
 surpic.enough.threshold = <%= $imdate::sarsurpic_soft_limit %>
-surpic.error.threshold = <%= $imdate::sarsurpic_soft_limit %>
+surpic.error.threshold = <%= $imdate::sarsurpic_hard_limit %>
 
 surpic.hours = <%= $imdate::sarsurpic_limit_by_hours %>
 
