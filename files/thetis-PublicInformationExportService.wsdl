@@ -1,0 +1,772 @@
+<!--
+ Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.2.8-b13937 svn-revision#13942. 
+-->
+<s0:definitions xmlns="" xmlns:s0="http://schemas.xmlsoap.org/wsdl/" xmlns:s1="http://eu/europa/emsa/thetis/integration/ws" xmlns:s2="java:eu.europa.emsa.thetis.integration.ws.exception" xmlns:s3="http://schemas.xmlsoap.org/wsdl/soap/" name="PublicInformationExportServiceDefinitions" targetNamespace="http://eu/europa/emsa/thetis/integration/ws">
+	<s0:types>
+		<xs:schema xmlns:thetis="urn:eu.europa.emsa.thetis.getBannedShipsList" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" id="GetBannedShipsList" targetNamespace="urn:eu.europa.emsa.thetis.getBannedShipsList">
+			<!-- ===============  REQUEST BANNED SHIPS ===============  -->
+			<xs:element name="RequestBannedShips">
+				<xs:complexType>
+					<xs:attribute name="IMO" type="thetis:IMONumber" use="optional"/>
+					<xs:attribute name="ShipName" type="thetis:String01-35" use="optional"/>
+					<xs:attribute name="Flag" type="thetis:FlagCode" use="optional"/>
+					<xs:attribute name="ISMCompanyNumber" type="thetis:IMONumber" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<!--  ===============  GET BANNED SHIPS ===============   -->
+			<xs:element name="BannedShipsReceipt">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="1" name="BannedShips">
+							<xs:complexType>
+								<xs:sequence>
+									<!-- ===============  SHIP IDENTIFICATION ===============  -->
+									<xs:element maxOccurs="1" minOccurs="1" name="ShipIdentification">
+										<xs:complexType>
+											<xs:attribute name="Imo" type="thetis:IMONumber" use="required"/>
+											<xs:attribute name="ShipName" type="thetis:String01-35" use="optional"/>
+											<xs:attribute name="Flag" type="xs:string" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+									<!--  ===============  ISM COMPANY ===============   -->
+									<xs:element maxOccurs="1" minOccurs="0" name="ISMCompany">
+										<xs:complexType>
+											<xs:attribute name="IMO" type="thetis:IMONumber" use="optional"/>
+											<xs:attribute name="Name" type="xs:string" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+									<!--  =============== BAN ===============   -->
+									<xs:element maxOccurs="1" minOccurs="1" name="Banning">
+										<xs:complexType>
+											<xs:attribute name="DateOfBanning" type="xs:date" use="required"/>
+											<xs:attribute name="BanningAuthority" type="xs:string" use="optional"/>
+											<xs:attribute name="MinimumDurationOfBan" type="xs:string" use="required"/>
+											<xs:attribute name="ReasonForBanning" type="thetis:BanReason" use="required"/>
+											<xs:attribute name="Occurrence" type="xs:string" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--  ===============  DECLARATION TYPES ===============   -->
+			<xs:simpleType name="IMONumber">
+				<xs:restriction base="xs:string">
+					<xs:length value="7"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="String01-35">
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+					<xs:maxLength value="35"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="FlagCode">
+				<xs:restriction base="xs:string">
+					<xs:length value="2"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="BanReason">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Failed to call at indicated repair yard"/>
+					<xs:enumeration value="Jumped detention"/>
+					<xs:enumeration value="Multiple detention"/>
+					<xs:enumeration value="No valid ISM Certification"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+		<xs:schema xmlns:thetis="urn:eu.europa.emsa.thetis.getcompanyperformance" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" id="GetCompanyPerformance" targetNamespace="urn:eu.europa.emsa.thetis.getcompanyperformance">
+			<!-- ===============  REQUEST COMPANY PERFORMANCE ===============  -->
+			<xs:element name="RequestCompanyPerformance">
+				<xs:complexType>
+					<xs:attribute name="ISMCompanyNumber" type="thetis:IMONumber" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<!-- =============== COMPANY PERFORMANCE RECEIPT ================  -->
+			<xs:element name="CompanyPerformanceReceipt">
+				<xs:complexType>
+					<xs:attribute name="Name" type="xs:string" use="required"/>
+					<xs:attribute name="Performance" type="thetis:CompanyPerformance" use="optional"/>
+					<xs:attribute name="ReturnMessage" type="xs:string" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<!--  ===============  DECLARATION TYPES ===============   -->
+			<xs:simpleType name="CompanyPerformance">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Very Low"/>
+					<xs:enumeration value="Low"/>
+					<xs:enumeration value="Medium"/>
+					<xs:enumeration value="High"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="IMONumber">
+				<xs:restriction base="xs:string">
+					<xs:length value="7"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+		<xs:schema xmlns:thetis="urn:eu.europa.emsa.thetis.getValidatedInspections" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" id="GetValidatedInspections" targetNamespace="urn:eu.europa.emsa.thetis.getValidatedInspections">
+			<!-- ===============  REQUEST VALIDATED INSPECTIONS =============== -->
+			<xs:element name="RequestValidatedInspections">
+				<xs:complexType>
+					<xs:attribute name="IMO" type="thetis:IMONumber" use="optional"/>
+					<xs:attribute name="ShipName" type="thetis:String01-35" use="optional"/>
+					<xs:attribute name="Flag" type="xs:string" use="optional"/>
+					<xs:attribute name="ShipType" type="xs:string" use="optional"/>
+					<xs:attribute name="GrossTonnageFrom" type="xs:integer" use="optional"/>
+					<xs:attribute name="GrossTonnageTo" type="xs:integer" use="optional"/>
+					<xs:attribute name="AgeFrom" type="xs:integer" use="optional"/>
+					<xs:attribute name="AgeTo" type="xs:integer" use="optional"/>
+					<xs:attribute name="ClassificationSociety" type="xs:string" use="optional"/>
+					<xs:attribute name="ROPerformingStatutoryWork" type="xs:string" use="optional"/>
+					<xs:attribute name="ISMCompanyNumber" type="thetis:IMONumber" use="optional"/>
+					<xs:attribute name="StartPeriod" type="xs:date" use="optional"/>
+					<xs:attribute name="EndPeriod" type="xs:date" use="optional"/>
+					<xs:attribute name="isPSC" type="xs:boolean" use="optional" default="1"/>
+					<xs:attribute name="PSCInspectionType" type="thetis:PSCInspectionType" use="optional"/>
+					<xs:attribute name="ROPaxInspectionType" type="thetis:ROPaxInspectionType" use="optional"/>
+					<xs:attribute name="PortState" type="xs:string" use="optional"/>
+					<xs:attribute name="PortOfInspection" type="xs:string" use="optional"/>
+					<xs:attribute name="Detention" type="xs:boolean" use="optional" default="0"/>
+					<xs:attribute name="PoO" type="xs:boolean" use="optional" default="0"/>
+					<xs:attribute name="Ban" type="xs:boolean" use="optional" default="0"/>
+					<xs:attribute name="NrOfDeficiencies" type="thetis:NrOfDeficiencies" use="optional"/>
+					<xs:attribute name="DurationOfDetention" type="thetis:DurationOfDetention" use="optional"/>
+					<xs:attribute name="PageNumber" type="xs:integer" use="optional" default="1"/>
+				</xs:complexType>
+			</xs:element>
+			<!-- ===============  GET VALIDATED INSPECTIONS =============== -->
+			<xs:element name="ValidatedInspectionsReceipt">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Inspection" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<!--  ===============  SHIP PARTICULAR ===============   -->
+									<xs:element name="ShipParticulars" minOccurs="1" maxOccurs="1">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Name" minOccurs="1" maxOccurs="1">
+													<xs:complexType>
+														<xs:attribute name="Value" type="thetis:String01-35" use="required"/>
+														<xs:attribute name="EffectDate" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="Flag" minOccurs="0" maxOccurs="1">
+													<xs:complexType>
+														<xs:attribute name="Value" type="thetis:FlagCode" use="required"/>
+														<xs:attribute name="EffectDate" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="ShipType" minOccurs="0" maxOccurs="1">
+													<xs:complexType>
+														<xs:attribute name="Value" type="thetis:ShipTypeCode" use="required"/>
+														<xs:attribute name="EffectDate" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="KeelDate" minOccurs="0" maxOccurs="1">
+													<xs:complexType>
+														<xs:attribute name="Value" type="xs:date" use="required"/>
+														<xs:attribute name="EffectDate" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="CallSign" minOccurs="0" maxOccurs="1">
+													<xs:complexType>
+														<xs:attribute name="Value" type="thetis:CallSignValue" use="required"/>
+														<xs:attribute name="EffectDate" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+												<xs:element name="GrossTonnage" minOccurs="0" maxOccurs="1">
+													<xs:complexType>
+														<xs:attribute name="Value" type="xs:integer" use="required"/>
+														<xs:attribute name="EffectDate" type="xs:date" use="required"/>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+											<xs:attribute name="IMO" type="thetis:IMONumber" use="required"/>
+										</xs:complexType>
+									</xs:element>
+									<!-- =============== ISM COMPANY =============== -->
+									<xs:element name="ISMCompany" minOccurs="0" maxOccurs="1">
+										<xs:complexType>
+											<xs:attribute name="IMO" type="thetis:IMONumber" use="optional"/>
+											<xs:attribute name="Name" type="xs:string" use="optional"/>
+											<xs:attribute name="Address" type="xs:string" use="optional"/>
+											<xs:attribute name="City" type="xs:string" use="optional"/>
+											<xs:attribute name="Country" type="xs:string" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+									<!-- =============== CHARTERERS =============== -->
+									<xs:element name="Charterers" minOccurs="0" maxOccurs="1">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Charterer" minOccurs="1" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:attribute name="Type" type="thetis:ReferenceCode" use="required"/>
+														<xs:attribute name="Name" type="xs:string" use="required"/>
+														<xs:attribute name="Address" type="xs:string" use="optional"/>
+														<xs:attribute name="City" type="xs:string" use="optional"/>
+														<xs:attribute name="Country" type="xs:string" use="required"/>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<!-- =============== CLASS CERTIFICATES =============== -->
+									<xs:element name="ClassCertificates" minOccurs="0" maxOccurs="1">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="ClassCertificate" minOccurs="1" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:attribute name="IssuingAuthority" type="xs:string" use="required"/>
+														<xs:attribute name="StatusClass" type="thetis:ReferenceCode" use="required"/>
+														<xs:attribute name="StatusDate" type="xs:date" use="required"/>
+														<xs:attribute name="IssueDate" type="xs:date" use="required"/>
+														<xs:attribute name="ExpiryDate" type="xs:date" use="optional"/>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<!-- =============== STATUTORY CERTIFICATES =============== -->
+									<xs:element name="StatutoryCertificates" minOccurs="0" maxOccurs="1">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="StatutoryCertificate" minOccurs="1" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:attribute name="CertificateCode" type="thetis:ReferenceCode" use="required"/>
+														<xs:attribute name="IssueDate" type="xs:date" use="required"/>
+														<xs:attribute name="ExpiryDate" type="xs:date" use="optional"/>
+														<xs:attribute name="IssuingAutorityType" type="thetis:AuthorityType" use="required"/>
+														<xs:attribute name="IssuingAuthority" type="xs:string" use="required"/>
+														<xs:attribute name="SurveyingAuthorityType" type="thetis:AuthorityType" use="optional"/>
+														<xs:attribute name="SurveyingAuthority" type="xs:string" use="optional"/>
+														<xs:attribute name="LastSurveyDate" type="xs:date" use="optional"/>
+														<xs:attribute name="LastSurveyPlace" type="xs:string" use="optional"/>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<!-- =============== PORTS IN ROUTE =============== -->
+									<xs:element name="Route" minOccurs="0" maxOccurs="1">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Port" minOccurs="1" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:attribute name="Country" type="xs:string" use="required"/>
+														<xs:attribute name="PortName" type="xs:string" use="required"/>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<!-- =============== INSPECTION DETAILS =============== -->
+									<xs:element name="InspectionDetails" minOccurs="1" maxOccurs="1">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="TypeOfInspection" minOccurs="1" maxOccurs="1">
+													<xs:complexType>
+														<xs:attribute name="InspectionRegime" type="thetis:Regime" use="required"/>
+														<xs:attribute name="PSCInspectionType" type="thetis:PSCInspectionType" use="optional"/>
+														<xs:attribute name="ROPaxInspectionType" type="thetis:ROPaxInspectionType" use="optional"/>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+											<xs:attribute name="InspectionID" type="xs:long" use="required"/>
+											<xs:attribute name="ReportingAuthority" type="thetis:CountryCode" use="required"/>
+											<xs:attribute name="PlaceOfInspection" type="xs:string" use="required"/>
+											<xs:attribute name="DateOfFirstVisit" type="xs:date" use="required"/>
+											<xs:attribute name="DateOfFinalVisit" type="xs:date" use="required"/>
+											<xs:attribute name="NrOfDeficiencies" type="xs:integer" use="optional"/>
+											<xs:attribute name="NrOfDeficienciesGroundDetention" type="xs:integer" use="optional"/>
+											<xs:attribute name="Result" type="xs:string" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+									<!-- =============== INSPECTED AREAS =============== -->
+									<xs:element name="InspectedShipAreas" minOccurs="0" maxOccurs="1">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="ShipArea" minOccurs="1" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:attribute name="Area" type="xs:string" use="required"/>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<!-- ===============  OPERATIONAL CONTROLS =============== -->
+									<xs:element name="OperationalControls" minOccurs="0" maxOccurs="1">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="OperationalControlCarriedOut" minOccurs="1" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:attribute name="OperationalControl" type="xs:string" use="required"/>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<!-- =============== DEFICIENCIES =============== -->
+									<xs:element name="Deficiencies" minOccurs="0" maxOccurs="1">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Deficiency" minOccurs="1" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:attribute name="Area" type="xs:string" use="required"/>
+														<xs:attribute name="DefectiveItemCode" type="thetis:DefectiveItemCode" use="required"/>
+														<xs:attribute name="DefectiveItem" type="xs:string" use="required"/>
+														<xs:attribute name="NatureOfDefectCode" type="thetis:NatureOfDefectCode" use="required"/>
+														<xs:attribute name="isGroundForDetention" type="xs:boolean" use="required"/>
+														<xs:attribute name="isRORelated" type="xs:boolean" use="required"/>
+														<xs:attribute name="isAccidentalDamage" type="xs:boolean" use="required"/>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<!--  =============== DETENTION ===============   -->
+									<xs:element name="Detention" minOccurs="0" maxOccurs="1">
+										<xs:complexType>
+											<xs:attribute name="Type" type="thetis:DetentionType" use="required"/>
+											<xs:attribute name="DurationOfDetention" type="xs:int" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+									<!-- ========================================== -->
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="NumberOfInspections" type="xs:integer" use="required"/>
+					<xs:attribute name="CurrentPage" type="xs:integer" use="required"/>
+					<xs:attribute name="TotalNumberOfPages" type="xs:integer" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<!-- ===============  DECLARATION TYPES =============== -->
+			<xs:simpleType name="IMONumber">
+				<xs:restriction base="xs:string">
+					<xs:length value="7"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="CallSignValue">
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+					<xs:maxLength value="7"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="MMSINumber">
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+					<xs:maxLength value="9"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ShipTypeCode">
+				<xs:restriction base="xs:string">
+					<xs:minLength value="3"/>
+					<xs:maxLength value="6"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="String01-35">
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+					<xs:maxLength value="35"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="FlagCode">
+				<xs:restriction base="xs:string">
+					<xs:length value="2"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="PSCInspectionType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ALL"/>
+					<xs:enumeration value="Initial inspection"/>
+					<xs:enumeration value="More detailed inspection"/>
+					<xs:enumeration value="Expanded inspection"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ROPaxInspectionType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ALL"/>
+					<xs:enumeration value="Initial specific survey"/>
+					<xs:enumeration value="Annual specific survey"/>
+					<xs:enumeration value="Other survey"/>
+					<xs:enumeration value="In-service survey"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="NrOfDeficiencies">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ALL"/>
+					<xs:enumeration value="0"/>
+					<xs:enumeration value="1-5"/>
+					<xs:enumeration value="6-10"/>
+					<xs:enumeration value="11-20"/>
+					<xs:enumeration value="More than 20"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="DurationOfDetention">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ALL"/>
+					<xs:enumeration value="1"/>
+					<xs:enumeration value="2-5"/>
+					<xs:enumeration value="6-15"/>
+					<xs:enumeration value="More than 15 days"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ReferenceCode">
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+					<xs:maxLength value="3"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="Regime">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="PSC"/>
+					<xs:enumeration value="ROPax"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="DefectiveItemCode">
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+					<xs:maxLength value="5"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="NatureOfDefectCode">
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+					<xs:maxLength value="5"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="CountryCode">
+				<xs:restriction base="xs:string">
+					<xs:length value="2"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="AuthorityType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Flag"/>
+					<xs:enumeration value="RO"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="DetentionType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Manual"/>
+					<xs:enumeration value="Deficiency"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+		<xs:schema xmlns:thetis="urn:eu.europa.emsa.thetis.getCurrentlyDetainedShipsList" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" id="GetCurrentlyDetainedShipsList" targetNamespace="urn:eu.europa.emsa.thetis.getCurrentlyDetainedShipsList">
+			<!-- ===============  GET CURRENTLY DETAINED SHIPS =============== -->
+			<xs:element name="CurrentlyDetainedShipsReceipt">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="1" name="Detention">
+							<xs:complexType>
+								<xs:sequence>
+									<!-- ===============  SHIP IDENTIFICATION =============== -->
+									<xs:element maxOccurs="1" minOccurs="1" name="ShipIdentification">
+										<xs:complexType>
+											<xs:attribute name="Imo" type="thetis:IMONumber" use="required"/>
+											<xs:attribute name="ShipName" type="thetis:String01-35" use="optional"/>
+											<xs:attribute name="ShipType" type="thetis:ShipTypeCode" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+									<!-- =============== DETENTION =============== -->
+									<xs:element maxOccurs="1" minOccurs="1" name="Detention">
+										<xs:complexType>
+											<xs:attribute name="DateOfDetention" type="xs:date" use="optional"/>
+											<xs:attribute name="PortOfDetention" type="xs:string" use="required"/>
+											<xs:attribute name="DetainingAuthority" type="thetis:CountryCode" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--  ===============  DECLARATION TYPES ===============   -->
+			<xs:simpleType name="IMONumber">
+				<xs:restriction base="xs:string">
+					<xs:length value="7"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="String01-35">
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+					<xs:maxLength value="35"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ShipTypeCode">
+				<xs:restriction base="xs:string">
+					<xs:minLength value="3"/>
+					<xs:maxLength value="6"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="CountryCode">
+				<xs:restriction base="xs:string">
+					<xs:length value="2"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+		<xs:schema xmlns:thetis="urn:eu.europa.emsa.thetis.getPreventionsOfOperationShipsList" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" id="GetPreventionsOfOperationShipsList" targetNamespace="urn:eu.europa.emsa.thetis.getPreventionsOfOperationShipsList">
+			<!-- ===============  GET PREVENTIONS OF OPERATION =============== -->
+			<xs:element name="PreventionsOfOperationShipsReceipt">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" minOccurs="1" name="Prevention">
+							<xs:complexType>
+								<xs:sequence>
+									<!-- ===============  SHIP IDENTIFICATION =============== -->
+									<xs:element maxOccurs="1" minOccurs="1" name="ShipIdentification">
+										<xs:complexType>
+											<xs:attribute name="Imo" type="thetis:IMONumber" use="required"/>
+											<xs:attribute name="ShipName" type="thetis:String01-35" use="optional"/>
+											<xs:attribute name="ShipType" type="thetis:ShipTypeCode" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+									<!--  =============== POO ===============   -->
+									<xs:element maxOccurs="1" minOccurs="1" name="PreventionOfOperation">
+										<xs:complexType>
+											<xs:attribute name="DateOfPreventionOfOperation" type="xs:date" use="optional"/>
+											<xs:attribute name="Reason" type="xs:string" use="required"/>
+											<xs:attribute name="IssuingAuthority" type="xs:string" use="optional"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--  ===============  DECLARATION TYPES =============== -->
+			<xs:simpleType name="IMONumber">
+				<xs:restriction base="xs:string">
+					<xs:length value="7"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="String01-35">
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+					<xs:maxLength value="35"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name="ShipTypeCode">
+				<xs:restriction base="xs:string">
+					<xs:minLength value="3"/>
+					<xs:maxLength value="6"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://eu/europa/emsa/thetis/integration/ws">
+			<xs:import namespace="urn:eu.europa.emsa.thetis.getBannedShipsList"/>
+			<xs:import namespace="urn:eu.europa.emsa.thetis.getcompanyperformance"/>
+			<xs:import namespace="urn:eu.europa.emsa.thetis.getPreventionsOfOperationShipsList"/>
+			<xs:import namespace="urn:eu.europa.emsa.thetis.getValidatedInspections"/>
+			<xs:import namespace="urn:eu.europa.emsa.thetis.getCurrentlyDetainedShipsList"/>
+			<xs:element name="getCurrentlyDetainedShipsList">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getCurrentlyDetainedShipsListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element xmlns:urn="urn:eu.europa.emsa.thetis.getCurrentlyDetainedShipsList" ref="urn:CurrentlyDetainedShipsReceipt"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getBannedShipsList">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="IMO" type="xs:string"/>
+						<xs:element name="ShipName" type="xs:string"/>
+						<xs:element name="Flag" type="xs:string"/>
+						<xs:element name="ISMCompanyNumber" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getBannedShipsListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element xmlns:urn="urn:eu.europa.emsa.thetis.getBannedShipsList" ref="urn:BannedShipsReceipt"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getValidatedInspections">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element xmlns:urn="urn:eu.europa.emsa.thetis.getValidatedInspections" ref="urn:RequestValidatedInspections"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getValidatedInspectionsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element xmlns:urn="urn:eu.europa.emsa.thetis.getValidatedInspections" ref="urn:ValidatedInspectionsReceipt"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getPreventionsOfOperationList">
+				<xs:complexType>
+					<xs:sequence/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getPreventionsOfOperationListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element xmlns:urn="urn:eu.europa.emsa.thetis.getPreventionsOfOperationShipsList" ref="urn:PreventionsOfOperationShipsReceipt"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getCompanyPerformance">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ISMCompanyNumber" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getCompanyPerformanceResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element xmlns:urn="urn:eu.europa.emsa.thetis.getcompanyperformance" ref="urn:CompanyPerformanceReceipt"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="java:eu.europa.emsa.thetis.integration.ws.exception">
+			<xs:complexType name="DataExchangeException"/>
+			<xs:element xmlns:java="java:eu.europa.emsa.thetis.integration.ws.exception" name="DataExchangeException" type="java:DataExchangeException"/>
+		</xs:schema>
+	</s0:types>
+	<s0:message name="getCurrentlyDetainedShipsList">
+		<s0:part element="s1:getCurrentlyDetainedShipsList" name="parameters"/>
+	</s0:message>
+	<s0:message name="getCurrentlyDetainedShipsListResponse">
+		<s0:part element="s1:getCurrentlyDetainedShipsListResponse" name="parameters"/>
+	</s0:message>
+	<s0:message name="DataExchangeException">
+		<s0:part element="s2:DataExchangeException" name="DataExchangeException"/>
+	</s0:message>
+	<s0:message name="getBannedShipsList">
+		<s0:part element="s1:getBannedShipsList" name="parameters"/>
+	</s0:message>
+	<s0:message name="getBannedShipsListResponse">
+		<s0:part element="s1:getBannedShipsListResponse" name="parameters"/>
+	</s0:message>
+	<s0:message name="getValidatedInspections">
+		<s0:part element="s1:getValidatedInspections" name="parameters"/>
+	</s0:message>
+	<s0:message name="getValidatedInspectionsResponse">
+		<s0:part element="s1:getValidatedInspectionsResponse" name="parameters"/>
+	</s0:message>
+	<s0:message name="getPreventionsOfOperationList">
+		<s0:part element="s1:getPreventionsOfOperationList" name="parameters"/>
+	</s0:message>
+	<s0:message name="getPreventionsOfOperationListResponse">
+		<s0:part element="s1:getPreventionsOfOperationListResponse" name="parameters"/>
+	</s0:message>
+	<s0:message name="getCompanyPerformance">
+		<s0:part element="s1:getCompanyPerformance" name="parameters"/>
+	</s0:message>
+	<s0:message name="getCompanyPerformanceResponse">
+		<s0:part element="s1:getCompanyPerformanceResponse" name="parameters"/>
+	</s0:message>
+	<s0:portType name="PublicInformationExportService">
+		<s0:operation name="getCurrentlyDetainedShipsList" parameterOrder="parameters">
+			<s0:input message="s1:getCurrentlyDetainedShipsList"/>
+			<s0:output message="s1:getCurrentlyDetainedShipsListResponse"/>
+			<s0:fault message="s1:DataExchangeException" name="DataExchangeException"/>
+		</s0:operation>
+		<s0:operation name="getBannedShipsList" parameterOrder="parameters">
+			<s0:input message="s1:getBannedShipsList"/>
+			<s0:output message="s1:getBannedShipsListResponse"/>
+			<s0:fault message="s1:DataExchangeException" name="DataExchangeException"/>
+		</s0:operation>
+		<s0:operation name="getValidatedInspections" parameterOrder="parameters">
+			<s0:input message="s1:getValidatedInspections"/>
+			<s0:output message="s1:getValidatedInspectionsResponse"/>
+			<s0:fault message="s1:DataExchangeException" name="DataExchangeException"/>
+		</s0:operation>
+		<s0:operation name="getPreventionsOfOperationList" parameterOrder="parameters">
+			<s0:input message="s1:getPreventionsOfOperationList"/>
+			<s0:output message="s1:getPreventionsOfOperationListResponse"/>
+			<s0:fault message="s1:DataExchangeException" name="DataExchangeException"/>
+		</s0:operation>
+		<s0:operation name="getCompanyPerformance" parameterOrder="parameters">
+			<s0:input message="s1:getCompanyPerformance"/>
+			<s0:output message="s1:getCompanyPerformanceResponse"/>
+			<s0:fault message="s1:DataExchangeException" name="DataExchangeException"/>
+		</s0:operation>
+	</s0:portType>
+	<s0:binding name="PublicInformationExportServiceSoapBinding" type="s1:PublicInformationExportService">
+		<s3:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<s0:operation name="getCurrentlyDetainedShipsList">
+			<s3:operation style="document"/>
+			<s0:input>
+				<s3:body parts="parameters" use="literal"/>
+			</s0:input>
+			<s0:output>
+				<s3:body parts="parameters" use="literal"/>
+			</s0:output>
+			<s0:fault name="DataExchangeException">
+				<s3:fault name="DataExchangeException" use="literal"/>
+			</s0:fault>
+		</s0:operation>
+		<s0:operation name="getBannedShipsList">
+			<s3:operation style="document"/>
+			<s0:input>
+				<s3:body parts="parameters" use="literal"/>
+			</s0:input>
+			<s0:output>
+				<s3:body parts="parameters" use="literal"/>
+			</s0:output>
+			<s0:fault name="DataExchangeException">
+				<s3:fault name="DataExchangeException" use="literal"/>
+			</s0:fault>
+		</s0:operation>
+		<s0:operation name="getValidatedInspections">
+			<s3:operation style="document"/>
+			<s0:input>
+				<s3:body parts="parameters" use="literal"/>
+			</s0:input>
+			<s0:output>
+				<s3:body parts="parameters" use="literal"/>
+			</s0:output>
+			<s0:fault name="DataExchangeException">
+				<s3:fault name="DataExchangeException" use="literal"/>
+			</s0:fault>
+		</s0:operation>
+		<s0:operation name="getPreventionsOfOperationList">
+			<s3:operation style="document"/>
+			<s0:input>
+				<s3:body parts="parameters" use="literal"/>
+			</s0:input>
+			<s0:output>
+				<s3:body parts="parameters" use="literal"/>
+			</s0:output>
+			<s0:fault name="DataExchangeException">
+				<s3:fault name="DataExchangeException" use="literal"/>
+			</s0:fault>
+		</s0:operation>
+		<s0:operation name="getCompanyPerformance">
+			<s3:operation style="document"/>
+			<s0:input>
+				<s3:body parts="parameters" use="literal"/>
+			</s0:input>
+			<s0:output>
+				<s3:body parts="parameters" use="literal"/>
+			</s0:output>
+			<s0:fault name="DataExchangeException">
+				<s3:fault name="DataExchangeException" use="literal"/>
+			</s0:fault>
+		</s0:operation>
+	</s0:binding>
+	<s0:service name="PublicInformationExportService">
+		<s0:port binding="s1:PublicInformationExportServiceSoapBinding" name="publicInformationExportService">
+			<s3:address location="http://twls27.emsa.local:7041/thetis-data-exchange-integration-webservice/PublicInformationExportService"/>
+		</s0:port>
+	</s0:service>
+</s0:definitions>

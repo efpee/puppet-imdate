@@ -102,6 +102,8 @@ class imdate (
   $db_commit_interval               = 120000,
   $cache_expiration                 = 1440,
   
+  $oes_enabled                      = 'false',
+  
   $distribution_processors          = 300,
   $distribution_aggregation         = 10,
   $distribution_aggregation_timeout = 3600,
@@ -130,6 +132,7 @@ class imdate (
   
   $db_cleaner_rpm_version           = '',
   $incident_rpm_version             = '',
+  $incident_correlation_requestor   = '',
   $xquery_distributor_rpm_version   = '',
   $aux_data_rpm_version             = '1-1.8',
     
@@ -394,6 +397,12 @@ class imdate (
    
   file {"$app_dir/conf/AREA_CATEGORIES.csv":
     source              => 'puppet:///modules/imdate/AREA_CATEGORIES.csv',
+  } 
+  file {"$app_dir/conf/wsdl/thetis-PublicInformationExportService.wsdl":
+    source              => 'puppet:///modules/imdate/thetis-PublicInformationExportService.wsdl',
+  } 
+  file {"$app_dir/conf/wsdl/thetis-ShipProxyService.wsdl":
+    source              => 'puppet:///modules/imdate/thetis-ShipProxyService.wsdl',
   } 
   file {"$app_dir/conf/imdate.port":
     content             => epp('imdate/conf/imdate.port.epp'),

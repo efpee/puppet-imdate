@@ -1,15 +1,10 @@
 lftp sftp://<%= $imdate::sftp_server %> -e "set net:max-retries 3; set net:timeout 1m; set net:reconnect-interval-base 5" <<EOF
 user <%= $imdate::sftp_user %> <%= $imdate::sftp_pass %>
 
-lcd <%= $imdate::app_dir %>/working_dirs/
+lcd <%= $imdate::app_dir %>/incident_working_dir/
 
-ls  EFCA/output/incident-*.xml
-mget -E -O incidents/inbox EFCA/output/incident-*.xml
-ls EUNAVFOR/output/incident-*.xml
-mget -E -O incidents/inbox EUNAVFOR/output/incident-*.xml
+mget -E -O . EFCA/output/incident-*.xml
+mget -E -O . EUNAVFOR/output/incident-*.xml
 
 quit 0
 EOF
-
-echo End downloading incidents 
-

@@ -1,0 +1,203 @@
+<WL5G3N0:definitions xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="http://eu/europa/emsa/thetis/integration/ws" xmlns:WL5G3N2="http://schemas.xmlsoap.org/wsdl/soap/" name="JwsServiceDefinitions" targetNamespace="http://eu/europa/emsa/thetis/integration/ws">
+	<WL5G3N0:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="java:eu.europa.emsa.thetis.integration.osb.dto">
+			<xs:complexType name="ValueObject">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="Code" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="Description" nillable="true" type="xs:string"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ShipParticulars">
+				<xs:sequence>
+					<xs:element xmlns:java="java:eu.europa.emsa.thetis.integration.osb.dto" maxOccurs="unbounded" minOccurs="1" name="ShipParticularsDetails" nillable="true" type="java:ShipParticularsDetails"/>
+				</xs:sequence>
+				<xs:attribute name="ImoNumber" type="xs:string" use="required"/>
+			</xs:complexType>
+			<xs:complexType name="ShipParticularsDetails">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="CallSign" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="ContractDate" nillable="true" type="xs:dateTime"/>
+					<xs:element minOccurs="1" name="ConversionDate" nillable="true" type="xs:dateTime"/>
+					<xs:element minOccurs="1" name="DeadWeight" nillable="true" type="xs:decimal"/>
+					<xs:element minOccurs="1" name="DeliveryDate" nillable="true" type="xs:dateTime"/>
+					<xs:element minOccurs="1" name="FlagCode" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="FlagDescription" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="GrossTonnage" nillable="true" type="xs:int"/>
+					<xs:element minOccurs="1" name="KeelDate" nillable="true" type="xs:dateTime"/>
+					<xs:element minOccurs="1" name="Mmsi" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="ShipEnginesForPropulsion" nillable="true" type="xs:int"/>
+					<xs:element minOccurs="1" name="ShipLength" nillable="true" type="xs:decimal"/>
+					<xs:element minOccurs="1" name="ShipMainEngineKW" nillable="true" type="xs:int"/>
+					<xs:element minOccurs="1" name="ShipName" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="ShipStatusCode" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="ShipStatusDescription" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="ShipTypeAbbreviation" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="ShipTypeCode" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="ShipTypeDescription" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="ShipTypeHighRisk" nillable="true" type="xs:boolean"/>
+					<xs:element minOccurs="1" name="ShipTypePassenger" nillable="true" type="xs:boolean"/>
+					<xs:element minOccurs="1" name="ShipTypeRopax" nillable="true" type="xs:boolean"/>
+					<xs:element minOccurs="1" name="ShipTypeTanker" nillable="true" type="xs:boolean"/>
+					<xs:element minOccurs="1" name="ShipYardCountryCode" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="ShipYardCountryDescription" nillable="true" type="xs:string"/>
+					<xs:element minOccurs="1" name="ShipYardName" nillable="true" type="xs:string"/>
+				</xs:sequence>
+				<xs:attribute name="EffectDate" type="xs:dateTime" use="required"/>
+			</xs:complexType>
+			<xs:complexType name="ProfileInformationDetails">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="DeterminationDate" nillable="true" type="xs:dateTime"/>
+					<xs:element xmlns:java="java:eu.europa.emsa.thetis.integration.osb.dto" minOccurs="1" name="Value" nillable="true" type="java:ValueObject"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ProfileInformation">
+				<xs:sequence>
+					<xs:element xmlns:java="java:eu.europa.emsa.thetis.integration.osb.dto" minOccurs="1" name="ProfileInformationDetails" nillable="true" type="java:ProfileInformationDetails"/>
+				</xs:sequence>
+				<xs:attribute name="ImoNumber" type="xs:string" use="required"/>
+			</xs:complexType>
+		</xs:schema>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://eu/europa/emsa/thetis/integration/ws">
+			<xs:import namespace="java:eu.europa.emsa.thetis.integration.osb.dto"/>
+			<xs:complexType name="ArrayOfSimpleProfileInformation_literal">
+				<xs:sequence>
+					<xs:element xmlns:java="java:eu.europa.emsa.thetis.integration.osb.dto" maxOccurs="unbounded" minOccurs="0" name="ProfileInformation" nillable="true" type="java:ProfileInformation"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element xmlns:ws="http://eu/europa/emsa/thetis/integration/ws" name="ArrayOfSimpleProfileInformation_literal" type="ws:ArrayOfSimpleProfileInformation_literal"/>
+			<xs:complexType name="ArrayOfJavaLangstring_literal">
+				<xs:sequence>
+					<xs:element maxOccurs="50" minOccurs="1" name="imoNumber" nillable="false">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:pattern value="[a-zA-Z0-9]{7}"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element xmlns:ws="http://eu/europa/emsa/thetis/integration/ws" name="ArrayOfJavaLangstring_literal" type="ws:ArrayOfJavaLangstring_literal"/>
+			<xs:complexType name="ArrayOfShipParticularsTransformed_literal">
+				<xs:sequence>
+					<xs:element xmlns:java="java:eu.europa.emsa.thetis.integration.osb.dto" maxOccurs="unbounded" minOccurs="0" name="ShipParticulars" nillable="true" type="java:ShipParticulars"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element xmlns:ws="http://eu/europa/emsa/thetis/integration/ws" name="ArrayOfShipParticularsTransformed_literal" type="ws:ArrayOfShipParticularsTransformed_literal"/>
+			<xs:element name="getShipRiskProfileForShips">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element xmlns:ws="http://eu/europa/emsa/thetis/integration/ws" name="imoNumbers" type="ws:ArrayOfJavaLangstring_literal"/>
+						<xs:element name="startDate" type="xs:dateTime"/>
+						<xs:element name="endDate" type="xs:dateTime"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getShipRiskProfileForShipsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element xmlns:ws="http://eu/europa/emsa/thetis/integration/ws" name="getShipRiskProfileForShipsDocument" type="ws:ArrayOfSimpleProfileInformation_literal"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getShipParticularsHistoryForShips">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element xmlns:ws="http://eu/europa/emsa/thetis/integration/ws" name="imoNumbers" type="ws:ArrayOfJavaLangstring_literal"/>
+						<xs:element name="startDate" type="xs:dateTime"/>
+						<xs:element name="endDate" type="xs:dateTime"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getShipParticularsHistoryForShipsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element xmlns:ws="http://eu/europa/emsa/thetis/integration/ws" name="getShipParticularsHistoryForShipsDocument" type="ws:ArrayOfShipParticularsTransformed_literal"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getShipPriorityForShips">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element xmlns:ws="http://eu/europa/emsa/thetis/integration/ws" name="imoNumbers" type="ws:ArrayOfJavaLangstring_literal"/>
+						<xs:element name="startDate" type="xs:dateTime"/>
+						<xs:element name="endDate" type="xs:dateTime"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getShipPriorityForShipsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element xmlns:ws="http://eu/europa/emsa/thetis/integration/ws" name="getShipPriorityForShipsDocument" type="ws:ArrayOfSimpleProfileInformation_literal"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</WL5G3N0:types>
+	<WL5G3N0:message name="getShipRiskProfileForShips">
+		<WL5G3N0:part element="WL5G3N1:getShipRiskProfileForShips" name="parameters"/>
+	</WL5G3N0:message>
+	<WL5G3N0:message name="getShipRiskProfileForShipsResponse">
+		<WL5G3N0:part element="WL5G3N1:getShipRiskProfileForShipsResponse" name="parameters"/>
+	</WL5G3N0:message>
+	<WL5G3N0:message name="getShipParticularsHistoryForShips">
+		<WL5G3N0:part element="WL5G3N1:getShipParticularsHistoryForShips" name="parameters"/>
+	</WL5G3N0:message>
+	<WL5G3N0:message name="getShipParticularsHistoryForShipsResponse">
+		<WL5G3N0:part element="WL5G3N1:getShipParticularsHistoryForShipsResponse" name="parameters"/>
+	</WL5G3N0:message>
+	<WL5G3N0:message name="getShipPriorityForShips">
+		<WL5G3N0:part element="WL5G3N1:getShipPriorityForShips" name="parameters"/>
+	</WL5G3N0:message>
+	<WL5G3N0:message name="getShipPriorityForShipsResponse">
+		<WL5G3N0:part element="WL5G3N1:getShipPriorityForShipsResponse" name="parameters"/>
+	</WL5G3N0:message>
+	<WL5G3N0:portType name="Jws">
+		<WL5G3N0:operation name="getShipRiskProfileForShips" parameterOrder="parameters">
+			<WL5G3N0:input message="WL5G3N1:getShipRiskProfileForShips"/>
+			<WL5G3N0:output message="WL5G3N1:getShipRiskProfileForShipsResponse"/>
+		</WL5G3N0:operation>
+		<WL5G3N0:operation name="getShipParticularsHistoryForShips" parameterOrder="parameters">
+			<WL5G3N0:input message="WL5G3N1:getShipParticularsHistoryForShips"/>
+			<WL5G3N0:output message="WL5G3N1:getShipParticularsHistoryForShipsResponse"/>
+		</WL5G3N0:operation>
+		<WL5G3N0:operation name="getShipPriorityForShips" parameterOrder="parameters">
+			<WL5G3N0:input message="WL5G3N1:getShipPriorityForShips"/>
+			<WL5G3N0:output message="WL5G3N1:getShipPriorityForShipsResponse"/>
+		</WL5G3N0:operation>
+	</WL5G3N0:portType>
+	<WL5G3N0:binding name="JwsServiceSoapBinding" type="WL5G3N1:Jws">
+		<WL5G3N2:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<WL5G3N0:operation name="getShipRiskProfileForShips">
+			<WL5G3N2:operation soapAction="http://eu/europa/emsa/thetis/integration/ws/getShipRiskProfileForShips" style="document"/>
+			<WL5G3N0:input>
+				<WL5G3N2:body parts="parameters" use="literal"/>
+			</WL5G3N0:input>
+			<WL5G3N0:output>
+				<WL5G3N2:body parts="parameters" use="literal"/>
+			</WL5G3N0:output>
+		</WL5G3N0:operation>
+		<WL5G3N0:operation name="getShipParticularsHistoryForShips">
+			<WL5G3N2:operation soapAction="http://eu/europa/emsa/thetis/integration/ws/getShipParticularsHistoryForShips" style="document"/>
+			<WL5G3N0:input>
+				<WL5G3N2:body parts="parameters" use="literal"/>
+			</WL5G3N0:input>
+			<WL5G3N0:output>
+				<WL5G3N2:body parts="parameters" use="literal"/>
+			</WL5G3N0:output>
+		</WL5G3N0:operation>
+		<WL5G3N0:operation name="getShipPriorityForShips">
+			<WL5G3N2:operation soapAction="http://eu/europa/emsa/thetis/integration/ws/getShipPriorityForShips" style="document"/>
+			<WL5G3N0:input>
+				<WL5G3N2:body parts="parameters" use="literal"/>
+			</WL5G3N0:input>
+			<WL5G3N0:output>
+				<WL5G3N2:body parts="parameters" use="literal"/>
+			</WL5G3N0:output>
+		</WL5G3N0:operation>
+	</WL5G3N0:binding>
+	<WL5G3N0:service name="JwsServiceSoapBindingQSService1">
+		<WL5G3N0:port binding="WL5G3N1:JwsServiceSoapBinding" name="JwsServiceSoapBindingQSPort1">
+			<WL5G3N2:address location="http://tesb02.emsa.local:7101/Thetis_Service_Layer/Proxy_Services/ShipProxyService"/>
+		</WL5G3N0:port>
+	</WL5G3N0:service>
+</WL5G3N0:definitions>

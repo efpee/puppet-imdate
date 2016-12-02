@@ -9,6 +9,7 @@ configurationFile.version=1.0
 
 urlIdentity = <%= $imdate::load_balanced_app_server_url -%>/ovrws/imdateId
 identity.service.user = <%= $imdate::service_identity_user %>
+incidents.correlation.requestor = <%= $imdate::incident_correlation_requestor %>
 
 ###############
 #
