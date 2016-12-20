@@ -102,8 +102,6 @@ class imdate (
   $db_commit_interval               = 120000,
   $cache_expiration                 = 1440,
   
-  $oes_enabled                      = 'false',
-  
   $distribution_processors          = 300,
   $distribution_aggregation         = 10,
   $distribution_aggregation_timeout = 3600,

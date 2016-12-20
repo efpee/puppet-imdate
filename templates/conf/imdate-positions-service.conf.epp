@@ -13,8 +13,6 @@ jms.uncorrelated.queue=imdate.uncorrelated.queue
 jms.username=<%= $imdate::jms_user %>
 jms.password=<%= $imdate::jms_pass %>
 
-oes.enabled=<%= $imdate::oes_enabled %>
-
 ############ LOG CONFIGURATION ############
 logLevel = <%= $imdate::log_level %>
 fileName = imdate-positions-service.log
