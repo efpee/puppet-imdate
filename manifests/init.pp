@@ -86,6 +86,10 @@ class imdate (
   
   $run_cron_jobs        = true,
   
+  # -----------------------------
+  # Imdate environment configuration
+  # -----------------------------
+  
   $savasnod_jolokia_host            = '',
   $savaseng_jolokia_host            = '',
   
@@ -111,7 +115,7 @@ class imdate (
   $distribution_cleaner_hours_count = 24,
   $distribution_redelivery_delay    = 60,
   $distribution_email               = 'noreply@emsa.europa.eu',
-  $distribution_ws_server           = 'qwls52',
+  $distribution_ws_server           = '',
   $distribution_ws_port             = '10180',
   $distribution_refresh             = 5000,
 
@@ -128,11 +132,7 @@ class imdate (
   $sarsurpic_hard_limit             = 2000,
   $sarsurpic_limit_by_hours         = 24,
   
-  $db_cleaner_rpm_version           = '',
-  $incident_rpm_version             = '',
   $incident_correlation_requestor   = '',
-  $xquery_distributor_rpm_version   = '',
-  $aux_data_rpm_version             = '1-1.8',
     
   $service_ccbr_wsdl    = '',
   $service_ccbr_user    = '',
@@ -161,8 +161,44 @@ class imdate (
 
   $service_csn          = '',
 
+  # -----------------------------
+  # Application user and group
+  # -----------------------------
+
   $oinstall_gid         = 115,
   $oracle_gid           = 115,
+
+  # -----------------------------  
+  # deployable versions
+  # -----------------------------
+  
+  $cap_reader_version                 = '',
+  $db_writer_version                  = '',
+  $distributor_version                = '',
+  $l0l1_processor_version             = '',
+  $l0_reader_version                  = '',
+  $ovr_reader_version                 = '',
+  $sarsurpic_processor_version        = '',
+  $uncorrelated_reader_version        = '',
+  $density_map_service_version        = '',
+  $dist_surv_version                  = '',
+  $distribution_application_version   = '',
+  $distribution_processors_version    = '',
+  $distribution_services_version      = '',
+  $georegistry_proxy_version          = '',
+  $ovr_service_version                = '',
+  $positions_service_version          = '',
+  $sarsurpic_version                  = '',
+  $ssn_server_version                 = '',
+  $ssn_service_version                = '',
+  $users_service_version              = '',
+  $video_version                      = '',
+  $wup_weblogic_version               = '',
+  $db_cleaner_rpm_version             = '',
+  $incident_rpm_version               = '',
+  $xquery_distributor_rpm_version     = '',
+  $aux_data_rpm_version               = '1-1.8',
+  $jolokia_version                    = '',
   
 ) {
 	Exec { path 	=>
@@ -327,13 +363,18 @@ class imdate (
 #    }
 
     if ($operatingsystem in ['RedHat', 'CentOS']) {
-      exec {'extract-imdate-db-cleaner':
-        command           => "rpm -i $app_dir/deployments/imdate-database-cleaner-$db_cleaner_rpm_version.noarch.rpm",
+      package {'imdate-db-cleaner':
+        provider        => rpm,
+        ensure          => "$db_cleaner_rpm_version",
+        source          => "$app_dir/deployment/imdate-database-cleaner-$db_cleaner_rpm_version.noarch.rpm",
+      }
+    
+      package {'imdate-incident':
+        provider        => rpm,
+        ensure          => "$incident_rpm_version",
+        source          => "$app_dir/deployment/imdate-incident-$incident_rpm_version.noarch.rpm",
       }
 
-      exec {'extract-imdate-incident':
-        command           => "rpm -i $app_dir/deployments/imdate-incident-$incident_rpm_version.noarch.rpm",
-      }
     }
     
     file {"$script_dir/jobs/database-cleaner.sh":
@@ -507,9 +548,13 @@ class imdate (
   }
 
   if ($operatingsystem in ['RedHat', 'CentOS']) {
-    exec {'extract-imdate-aux-data':
-      command             => "rpm -i $app_dir/deployments/imdate-aux-data-$aux_data_rpm_version.noarch.rpm",
-    } 
+  
+    package {'imdate-aux-data':
+      provider        => rpm,
+      ensure          => "$aux_data_rpm_version",
+      source          => "$app_dir/deployment/imdate-aux-data-$aux_data_rpm_version.noarch.rpm",
+    }
+  
   }
 
 	file {"$script_dir/wlst/connect.py":
