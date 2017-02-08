@@ -366,13 +366,13 @@ class imdate (
       package {'imdate-db-cleaner':
         provider        => rpm,
         ensure          => "$db_cleaner_rpm_version",
-        source          => "$app_dir/deployment/imdate-database-cleaner-$db_cleaner_rpm_version.noarch.rpm",
+        source          => "$app_dir/deployments/imdate-database-cleaner-$db_cleaner_rpm_version.noarch.rpm",
       }
     
       package {'imdate-incident':
         provider        => rpm,
         ensure          => "$incident_rpm_version",
-        source          => "$app_dir/deployment/imdate-incident-$incident_rpm_version.noarch.rpm",
+        source          => "$app_dir/deployments/imdate-incident-$incident_rpm_version.noarch.rpm",
       }
 
     }
@@ -552,7 +552,7 @@ class imdate (
     package {'imdate-aux-data':
       provider        => rpm,
       ensure          => "$aux_data_rpm_version",
-      source          => "$app_dir/deployment/imdate-aux-data-$aux_data_rpm_version.noarch.rpm",
+      source          => "$app_dir/deployments/imdate-aux-data-$aux_data_rpm_version.noarch.rpm",
     }
   
   }

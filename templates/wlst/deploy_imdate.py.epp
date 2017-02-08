@@ -90,10 +90,10 @@ applications = [
       'target':APP_CLUSTER, 
       'package':ARTIFACT_DIR+'/web-modules/imdate-ssn-service-ear-<%= $imdate::ssn_service_version %>.ear'},
     {
-      'new':"imdate-uncorrelated-reader-ear (<%= $imdate::uncorrelated_reader %>)", 
+      'new':"imdate-uncorrelated-reader-ear (<%= $imdate::uncorrelated_reader_version %>)", 
       'old':'', 
       'target':JMS_CLUSTER, 
-      'package':ARTIFACT_DIR+'/mdbs/imdate-uncorrelated-reader-ear-<%= $imdate::uncorrelated_reader %>.ear'},
+      'package':ARTIFACT_DIR+'/mdbs/imdate-uncorrelated-reader-ear-<%= $imdate::uncorrelated_reader_version %>.ear'},
     {
       'new':"imdate-users-service-ejbws (<%= $imdate::users_service_version %>)", 
       'old':'', 
