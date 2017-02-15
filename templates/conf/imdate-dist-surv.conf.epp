@@ -4,8 +4,8 @@ configurationFile.version=1.0
 ############ MODULE CONFIGURATION ############
 db.data-source=<%= $imdate::jdbc_app_server_ds %>
 
-ws.host=<%= $imdate::distribution_ws_server %>
-ws.port=<%= $imdate::distribution_ws_port %>
+savas.ws.host=<%= $imdate::distribution_ws_server %>
+savas.ws.port=<%= $imdate::distribution_ws_port %>
 
 distribution.smtp.host = <%= $imdate::smtp_host %>
 distribution.smtp.port = <%= $imdate::smtp_port %>

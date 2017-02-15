@@ -110,9 +110,6 @@ class imdate (
   $distribution_ws_port             = '10180',
   $distribution_refresh             = 5000,
 
-  $b2b3_ext_server,
-  $b2b3_int_server,
-  
   $track_service_limit_by_geom      = 10000,
   $track_service_limit_by_id        = 10000,
   $track_service_query_limit        = 10000,
@@ -122,6 +119,7 @@ class imdate (
   $sarsurpic_soft_limit             = 1000,
   $sarsurpic_hard_limit             = 2000,
   $sarsurpic_limit_by_hours         = 24,
+  $surpic_query_hint,
   
   $incident_correlation_requestor,
     

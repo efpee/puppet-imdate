@@ -2,6 +2,8 @@
 configurationFile.version=1.0
 
 ############ MODULE CONFIGURATION ############
+savas.ws.host=<%= $imdate::distribution_ws_server %>
+savas.ws.port=<%= $imdate::distribution_ws_port %>
 
 ############ LOG CONFIGURATION ############
 logLevel = <%= $imdate::log_level %>

@@ -20,6 +20,8 @@ lrit.endpoint = <%= $imdate::service_lrit_ws %>
 lrit.from = <%= $imdate::service_lrit_from %>
 lrit.to = EU_LRIT_DC
 
+surpic.search.hint = <%= $imdate::surpic_query_hint %>
+
 ############ LOG CONFIGURATION ############
 logLevel = <%= $imdate::log_level %>
 fileName = imdate-sarsurpic.log
