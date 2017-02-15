@@ -7,7 +7,7 @@ trackService.maxRecordCount.byId= <%= $imdate::track_service_limit_by_id %>
 trackService.query.limit= <%= $imdate::track_service_query_limit %>
 smartVesselSearch.maxRecords= <%= $imdate::smart_vessel_search_limit %>
 
-jms.provider-url=t3://<%= $imdate::jms_managed_servers.join(',') %>
+jms.provider-url=t3://<%= $imdate::jms_managed_server_urls.join(',') %>
 jms.connection-factory=imdate.ConnectionFactory
 jms.uncorrelated.queue=imdate.uncorrelated.queue
 jms.username=<%= $imdate::jms_user %>

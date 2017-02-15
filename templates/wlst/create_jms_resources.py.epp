@@ -23,8 +23,8 @@ QUEUES = (
     'imdate.uncorrelated.queue')
 
 TOPICS = (
-    'imdate.correlation.topic',
-    'imdate.downsampled.topic',
+    'imdate.l1.correlation.topic',
+    'imdate.l1.downsampled.topic',
     'imdate.l1.topic',
     'imdate.savasEvent.topic')
 

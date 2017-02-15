@@ -20,7 +20,7 @@ ssn.wsdl.soapAction = https://safeseanet.emsa.europa.eu/vesselservice/request
 #
 #  datasource name
 ####################################
-datasource.jndi.name=<%= $imdate::jdbc_jndi %>
+datasource.jndi.name=<%= $imdate::jdbc_jms_server_ds %>
 
 ###################################
 #  thetis services

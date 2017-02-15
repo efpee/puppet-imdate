@@ -2,7 +2,7 @@
 configurationFile.version=1.0
 
 ############ MODULE CONFIGURATION ############
-db.data-source = <%= $imdate::jdbc_jndi %>
+db.data-source = <%= $imdate::jdbc_jms_server_ds %>
 
 imdate.ovr-service.solr.isZookeperServer = false
 imdate.ovr-service.solr.serverUrl = <%= $imdate::service_solr %>/projects_ovr/

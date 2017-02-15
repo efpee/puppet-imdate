@@ -34,7 +34,7 @@ simulationMode = FALSE
 ###### MDBs handling section ######
 
 # server URL WITHOUT 'http://' prefix
-<% @jms_managed_servers.each_with_index { |server, i| 
+<% @jms_managed_server_urls.each_with_index { |server, i| 
   s_p = server.split(':')
 -%>
 weblogic.urls = <%= server -%>
@@ -62,7 +62,7 @@ mdb.imdate-db-writer.destination.name=imdate.l1.dbwriter.queue
 mdb.imdate-sarsurpic.destination.name=imdate.sarsurpic.queue
 
 lockTimeout = 60
-mdb.suspension.timeout=2000
+mdb.suspension.timeout=10000
 
 ############ LOG CONFIGURATION ############
 logLevel = <%= @log_level %>

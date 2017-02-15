@@ -2,7 +2,7 @@
 configurationFile.version=1.0
 
 ############ MODULE CONFIGURATION ############
-datasource.local= <%= $imdate::jdbc_jndi %>
+datasource.local= <%= $imdate::jdbc_jms_server_ds %>
 
 
 # POSITIONS_DENSITY_MAP TABLE WILL BE REFRESHED WITH DATA LIMITED BY :

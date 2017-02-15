@@ -2,7 +2,7 @@
 configurationFile.version=1.0
 
 ############ MODULE CONFIGURATION ############
-db.data-source=<%= $imdate::jdbc_jndi_user %>
+db.data-source=<%= $imdate::jdbc_app_server_ds %>
 
 ws.host=<%= $imdate::distribution_ws_server %>
 ws.port=<%= $imdate::distribution_ws_port %>

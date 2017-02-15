@@ -20,7 +20,7 @@ db.savas.password=<%= $imdate::jdbc_pass %>
 # JMS properties
 # -----------------------------------------------
 
-jms.provider.url=t3://<%= $imdate::jms_managed_servers.join(',') %> 
+jms.provider.url=t3://<%= $imdate::jms_managed_server_urls.join(',') %> 
 jms.initial.factory=weblogic.jndi.WLInitialContextFactory
 jms.connection.factory=imdate.ConnectionFactory
 jms.security.principal=<%= $imdate::jms_user %>

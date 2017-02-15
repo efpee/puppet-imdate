@@ -2,7 +2,7 @@
 configurationFile.version=1.0
 
 ############ MODULE CONFIGURATION ############
-db.data-source = <%= $imdate::jdbc_jndi %>
+db.data-source = <%= $imdate::jdbc_jms_server_ds %>
 wfs.url = <%= $imdate::service_wfs %>
 
 service.ccbr.wsdlLocation = <%= $imdate::service_ccbr_wsdl %>

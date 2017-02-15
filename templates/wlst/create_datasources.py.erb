@@ -1,0 +1,9 @@
+<% @jdbc_datasources.each_with_index { |ds, i| -%>
+
+jdbcRes = createJDBCDataSource(name='<%= ds['jndi_name'] %>', jndi='<%= ds['jndi_name'] %>', cluster_targets=<%= ds['targets'] %>, driver='<%= ds['driver'] %>', url='<%= ds['url'] %>', username='<%= ds['user'] %>', password='<%= ds['pass'] %>')
+configureConnectionPool(jdbcRes, initialCapacity=<%= ds['min_capacity'] %>, minCapacity=<%= ds['min_capacity'] %>, maxCapacity=<%= ds['max_capacity'] %>)
+if <%= ds['use_gridlink'] %>:
+  configureGridLinkDataSource(jdbcRes, <%= ds['grid_nodes'] %>)
+
+<% } %>
+

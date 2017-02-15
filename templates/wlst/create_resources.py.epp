@@ -2,11 +2,11 @@ print 'Start WebLogic deployment ....'
 
 DOMAIN_DIR = '<%= $imdate::wls_domain_dir %>'
 
-APP_CLUSTER = '<%= $imdate::wls_app_cluster %>'
-APP_MANAGED_SERVERS = [<%= $imdate::wls_app_servers.map |$s| {"\'$s\'"}.join(',') %>]
+APP_CLUSTER = '<%= $imdate::app_cluster %>'
+APP_MANAGED_SERVERS = [<%= $imdate::app_managed_server_names.map |$s| {"\'$s\'"}.join(',') %>]
 
-JMS_CLUSTER = '<%= $imdate::wls_jms_cluster %>'
-JMS_MANAGED_SERVERS = [<%= $imdate::wls_jms_servers.map |$s| {"\'$s\'"}.join(',') %>]
+JMS_CLUSTER = '<%= $imdate::jms_cluster %>'
+JMS_MANAGED_SERVERS = [<%= $imdate::jms_managed_server_names.map |$s| {"\'$s\'"}.join(',') %>]
 
 ARTIFACT_DIR = '<%= $imdate::app_dir %>/deployments'
 

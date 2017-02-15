@@ -2,7 +2,7 @@
 configurationFile.version=1.0
 
 ############ MODULE CONFIGURATION ############
-db.data-source = <%= $imdate::jdbc_jndi %>
+db.data-source = <%= $imdate::jdbc_jms_server_ds %>
 
 ssn.hazmat.endpoint = <%= $imdate::service_ssn %>/ssn-xmlprotocol-ws/ssnmessageservice
 ssn.hazmat.replyto = <%= $imdate::load_balanced_app_server_url -%>/imdatessn/ssn2ms

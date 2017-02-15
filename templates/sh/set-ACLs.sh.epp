@@ -1,6 +1,6 @@
 #!/bin/bash
 
-<% $servers = $imdate::wls_app_servers + $imdate::wls_jms_servers -%>
+<% $servers = $imdate::app_managed_server_names + $imdate::jms_managed_server_names -%>
 
 <% $servers.each |$server| { -%>
 setfacl -m g:imdate:rx <%= $imdate::wls_domain_dir%>servers/<%= $server %> <%= $imdate::wls_domain_dir%>servers/<%= $server %>/logs

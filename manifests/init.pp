@@ -41,48 +41,41 @@ class imdate (
   $app_dir              = '/imdate/imdate-apps',
   $log_level            = 'INFO',
 
-  $wls_user             = '',
-  $wls_pass             = '',
-  $wls_admin_url        = '',
+  $wls_user             = 'weblogic',
+  $wls_pass,
+  $wls_admin_url,
   $wls_domain_dir       = '/wl_domains/imdate',
-  $wls_app_cluster      = 'imdateAppCluster',
-  $wls_app_servers      = ['imdateAppSrv1', 'imdateAppSrv2'],
-  $wls_jms_cluster      = 'imdateJmsCluster',
-  $wls_jms_servers      = ['imdateJmsSrv1', 'imdateJmsSrv2', 'imdateJmsSrv3', 'imdateJmsSrv4'],
+  
+  $app_cluster          = 'imdateAppCluster',
+  $app_managed_server_names   = ['imdateAppSrv1', 'imdateAppSrv2'],
+  $app_managed_server_urls,
+  
+  $jms_cluster          = 'imdateJmsCluster',
+  $jms_managed_server_names   = ['imdateJmsSrv1', 'imdateJmsSrv2', 'imdateJmsSrv3', 'imdateJmsSrv4'],
+  $jms_managed_server_urls,
   
   $jdk_dir              = '/oracle/jdk',
   
-  $jdbc_driver          = 'oracle.jdbc.OracleDriver',
-  $jdbc_xa_driver       = 'oracle.jdbc.xa.client.OracleXADataSource',
-  $jdbc_jndi            = 'jdbc.imdate.imdateds',
-  $jdbc_url             = '',
-  $jdbc_grid_url        = '',
-  $jdbc_user            = '',
-  $jdbc_pass            = '',
-  $jdbc_init_capacity   = 1,
-  $jdbc_min_capacity    = 1,
-  $jdbc_max_capacity    = 5,
-  $jdbc_use_grid_link   = 'false',
-  $jdbc_grid_nodes      = '',
-  $jdbc_jndi_user       = 'jdbc.imdate.imdateusr',
-  $jdbc_url_satais      = '',
-  $jdbc_user_satais     = '',
-  $jdbc_pass_satais     = '',
-
-  $jms_user             = '',
-  $jms_pass             = '',
+  $jdbc_datasources, 
+  $jdbc_grid_nodes      = [],
+  
+  $jdbc_user             = 'imdate',
+  $jdbc_pass,
+  $jdbc_url,
+  $jdbc_grid_url,
+  
+  $jdbc_app_server_ds   = 'jdbc.imdate.imdateds',
+  $jdbc_jms_server_ds   = 'jdbc.imdate.imdateds',
+  
+  $jms_user             = 'imdateusr',
+  $jms_pass,
 
   $smtp_host            = '127.0.0.1',
   $smtp_port            = '25',
-  
-  $svn_user             = '',
-  $svn_pass             = '',
-  $svn_tag              = '',
-  $svn_server           = '',
 
-  $sftp_server           = '',
-  $sftp_user             = '',
-  $sftp_pass             = '',
+  $sftp_server,
+  $sftp_user            = 'IMDATEInternal',
+  $sftp_pass,
   
   $run_cron_jobs        = true,
   
@@ -90,17 +83,15 @@ class imdate (
   # Imdate environment configuration
   # -----------------------------
   
-  $savasnod_jolokia_host            = '',
-  $savaseng_jolokia_host            = '',
+  $savasnod_jolokia_host,
+  $savaseng_jolokia_host,
   
-  $retention_period_positions       = 30,
+  $retention_period_positions       = 1831,
   $retention_period_savas           = 7,
   $db_partitions_to_create          = 14,
-  $load_balanced_app_server_url     = '',
-  $load_balanced_jms_server_url     = '',
-  $load_balanced_http_server_url    = '',
-  $app_managed_servers              = [],
-  $jms_managed_servers              = [],
+  $load_balanced_app_server_url,
+  $load_balanced_jms_server_url,
+  $load_balanced_http_server_url,
   $jms_server_prefix                = 'ImdateJMSServer',
   $db_commit_treshold               = 1000,
   $db_commit_interval               = 120000,
@@ -115,16 +106,16 @@ class imdate (
   $distribution_cleaner_hours_count = 24,
   $distribution_redelivery_delay    = 60,
   $distribution_email               = 'noreply@emsa.europa.eu',
-  $distribution_ws_server           = '',
+  $distribution_ws_server,
   $distribution_ws_port             = '10180',
   $distribution_refresh             = 5000,
 
-  $b2b3_ext_server                  = '',  
-  $b2b3_int_server                  = '',
+  $b2b3_ext_server,
+  $b2b3_int_server,
   
-  $track_service_limit_by_geom      = 2000,
-  $track_service_limit_by_id        = 1000,
-  $track_service_query_limit        = 2000,
+  $track_service_limit_by_geom      = 10000,
+  $track_service_limit_by_id        = 10000,
+  $track_service_query_limit        = 10000,
   
   $smart_vessel_search_limit        = 150,
   
@@ -132,34 +123,34 @@ class imdate (
   $sarsurpic_hard_limit             = 2000,
   $sarsurpic_limit_by_hours         = 24,
   
-  $incident_correlation_requestor   = '',
+  $incident_correlation_requestor,
     
-  $service_ccbr_wsdl    = '',
-  $service_ccbr_user    = '',
-  $service_ccbr_pass    = '',
+  $service_ccbr_wsdl,
+  $service_ccbr_user,
+  $service_ccbr_pass,
   
-  $service_identity_user = '',
+  $service_identity_user,
   
-  $service_wfs          = '',
+  $service_wfs,
   
-  $service_solr         = '',
+  $service_solr,
   
-  $service_lrit_ws      = '',
-  $service_lrit_from    = '',
+  $service_lrit_ws,
+  $service_lrit_from,
   
-  $service_ssn          = '',
-  $service_ssn_ovr      = '',
+  $service_ssn,
+  $service_ssn_ovr,
   $service_ssn_ovr_auth = false,
-  $service_ssn_ovr_user = '',
-  $service_ssn_ovr_pass = '',
+  $service_ssn_ovr_user,
+  $service_ssn_ovr_pass,
   
-  $service_thetis       = '',
-  $service_thetis_inspections = '',
+  $service_thetis,
+  $service_thetis_inspections,
   $service_thetis_auth  = true,
-  $service_thetis_user  = '',
-  $service_thetis_pass  = '',
+  $service_thetis_user,
+  $service_thetis_pass,
 
-  $service_csn          = '',
+  $service_csn,
 
   # -----------------------------
   # Application user and group
@@ -172,33 +163,33 @@ class imdate (
   # deployable versions
   # -----------------------------
   
-  $cap_reader_version                 = '',
-  $db_writer_version                  = '',
-  $distributor_version                = '',
-  $l0l1_processor_version             = '',
-  $l0_reader_version                  = '',
-  $ovr_reader_version                 = '',
-  $sarsurpic_processor_version        = '',
-  $uncorrelated_reader_version        = '',
-  $density_map_service_version        = '',
-  $dist_surv_version                  = '',
-  $distribution_application_version   = '',
-  $distribution_processors_version    = '',
-  $distribution_services_version      = '',
-  $georegistry_proxy_version          = '',
-  $ovr_service_version                = '',
-  $positions_service_version          = '',
-  $sarsurpic_version                  = '',
-  $ssn_server_version                 = '',
-  $ssn_service_version                = '',
-  $users_service_version              = '',
-  $video_version                      = '',
-  $wup_weblogic_version               = '',
-  $db_cleaner_rpm_version             = '',
-  $incident_rpm_version               = '',
-  $xquery_distributor_rpm_version     = '',
-  $aux_data_rpm_version               = '1-1.8',
-  $jolokia_version                    = '',
+  $cap_reader_version,
+  $db_writer_version,
+  $distributor_version,
+  $l0l1_processor_version,
+  $l0_reader_version,
+  $ovr_reader_version,
+  $sarsurpic_processor_version,
+  $uncorrelated_reader_version,
+  $density_map_service_version,
+  $dist_surv_version,
+  $distribution_application_version,
+  $distribution_processors_version,
+  $distribution_services_version,
+  $georegistry_proxy_version,
+  $ovr_service_version,
+  $positions_service_version,
+  $sarsurpic_version,
+  $ssn_server_version,
+  $ssn_service_version,
+  $users_service_version,
+  $video_version,
+  $wup_weblogic_version,
+  $db_cleaner_rpm_version,
+  $incident_rpm_version,
+  $xquery_distributor_rpm_version,
+  $aux_data_rpm_version,
+  $jolokia_version,
   
 ) {
 	Exec { path 	=>
@@ -581,7 +572,7 @@ class imdate (
   } 
 	->
 	file {"$script_dir/wlst/create_datasources.py":
-		content	=> epp('imdate/wlst/create_datasources.py.epp'),
+		content	=> template('imdate/wlst/create_datasources.py.erb'),
 		mode    => '0700',
 	}  
   ->

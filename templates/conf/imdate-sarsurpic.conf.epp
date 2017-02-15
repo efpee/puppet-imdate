@@ -2,9 +2,9 @@
 configurationFile.version=1.0
 
 ############ MODULE CONFIGURATION ############
-db.data-source = jdbc.imdate.imdateusr
+db.data-source = <%= $imdate::jdbc_app_server_ds %>
 
-jms.provider-url = t3://<%= $imdate::jms_managed_servers.join(',') %>
+jms.provider-url = t3://<%= $imdate::jms_managed_server_urls.join(',') %>
 jms.connection-factory = imdate.ConnectionFactory
 jms.destination = imdate.sarsurpic.queue
 jms.username = <%= $imdate::jms_user %>

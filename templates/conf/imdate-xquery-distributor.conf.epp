@@ -27,7 +27,7 @@ oesEnabled = false
 ############################################################################
 # JMS Parameters: change according to your environment
 ############################################################################
-jms.input.provider-url = t3://<%= $imdate::jms_managed_servers.join(',') %>
+jms.input.provider-url = t3://<%= $imdate::jms_managed_server_urls.join(',') %>
 jms.input.connection-factory = imdate.ConnectionFactory
 jms.input.queue = imdate.l1.distributor.queue
 

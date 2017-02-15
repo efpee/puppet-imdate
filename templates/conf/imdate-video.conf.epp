@@ -3,7 +3,7 @@ configurationFile.version=1.0
 
 
 ############ MODULE CONFIGURATION ############
-db.data-source = <%= $imdate::jdbc_jndi %>
+db.data-source = <%= $imdate::jdbc_jms_server_ds %>
 
 ############ LOG CONFIGURATION ############
 logLevel = <%= $imdate::log_level %>
