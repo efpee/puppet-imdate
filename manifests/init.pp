@@ -566,7 +566,7 @@ class imdate (
 	} 
 	->
   exec {'fetch_datasource_functions':
-    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.2/datasource_functions.py -O $script_dir/wlst/datasource_functions.py",
+    command	=> "wget https://raw.githubusercontent.com/efpee/wlst/1.0.3/datasource_functions.py -O $script_dir/wlst/datasource_functions.py",
 		unless	=> "test -f $script_dir/wlst/datasource_functions.py",
 		require	=> Package['wget'],
   } 
